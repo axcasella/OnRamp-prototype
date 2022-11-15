@@ -1,62 +1,46 @@
-# 🏗 Scaffold-ETH - 🟣 Polygon NFT Example
+# OnRamp prototype app 🟣 Mints NFT to Polygon 
 
-> Build, mint, and send around your own ERC721 (NFT) on Mumbai (testnet) and then on Polygon/Matic mainnet!
-
-
-> [🎥 Watch the speed run video!](https://youtu.be/zgj8ZT4-9lk)
-
-
+> Build, mint, and send ERC721 NFT on Mumbai testnet / Polygon mainnet
 
 # 🏃‍♀️ Quick Start
-Required: [Node](https://nodejs.org/dist/latest-v12.x/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable) and [Git](https://git-scm.com/downloads)
+Required: [Node](https://nodejs.org/dist/latest-v16.x/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable) and [Git](https://git-scm.com/downloads)
 
 ```
-git clone https://github.com/austintgriffith/scaffold-eth.git matic-nft-tutorial
-```
-```
-cd matic-nft-tutorial
-```
-It is very important that you checkout the `matic-nft-tutorial` branch of 🏗 scaffold-eth:
-```
-git checkout matic-nft-tutorial
+git clone git@github.com:axcasella/OnRamp-prototype.git 
 ```
 
 ```
 yarn install
 ```
 
-First, be sure to check that you're deploying on `mumbai` by changing the `defaultNetwork` in `packages/hardhat/hardhat.config.js`:
-
-![image1](https://user-images.githubusercontent.com/76530366/127908961-ba120324-02d9-4c5b-92fc-2daa053691b5.png)
+Currently, the testnet is pointing to `mumbai`. This can be changed by updating `defaultNetwork` in `packages/hardhat/hardhat.config.js`:
 
  
-🔐 We will need to generate a **deployer** account:
+Generate a **deployer** account:
 
 ```
 yarn generate
 ```
 
-🙎 This will create a new mnemonic and you can get this **deployer** address using the command:
+This will create a new mnemonic. Next run this command to see the deployer address and account balances for networks.
 
 ```
 yarn account
 ```
 
-Go to https://faucet.matic.network to get some Mumbai-MATIC (testnet currency).
+Need to make sure we have MATIC for the testnet. Go to https://faucet.matic.network to get some Mumbai-MATIC.
 
-Confirm that your account has the funds needed for the rest of the tutorial: (check on https://mumbai.polygonscan.com)
+Once the account has the funds needed for the rest of the tutorial: (check on https://mumbai.polygonscan.com)
 
-> Compile and deploy your NFT contract:
+> Compile and deploy smart contract:
 
 ```
 yarn deploy
 ```
 
-To point the frontend at `mumbai` we will also need to edit `targetNetwork` in `packages/react-app/src/App.jsx`:
+By default, the React frontend is also pointing to `mumbai` testnet. This is set by the `targetNetwork` variable in `packages/react-app/src/App.jsx`:
 
-![image2](https://user-images.githubusercontent.com/76530366/127909020-6cd40a05-c28a-4791-9493-307a615c7dc4.png)
-
-Start the frontend with:
+Once deployment is done. Start the React app with
 
 ```
 yarn start

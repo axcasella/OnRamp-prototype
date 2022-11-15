@@ -9,6 +9,8 @@ Required: [Node](https://nodejs.org/dist/latest-v16.x/) plus [Yarn](https://clas
 git clone git@github.com:axcasella/OnRamp-prototype.git 
 ```
 
+Get your own Infura project ID and secret from [Infura](https://infura.io/dashboard). Plug in ID and secret into `INFURA_ID` and `INFURA_SECRET` in `packages/react-app/src/constants.js`. **Please do not use mine!**
+
 ```
 yarn install
 ```

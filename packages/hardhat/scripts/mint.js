@@ -1,8 +1,8 @@
 /* eslint no-use-before-define: "warn" */
-import ethers from "hardhat";
-import ipfsAPI from "ipfs-http-client";
-
 import { INFURA_ID, INFURA_SECRET } from "../../react-app/src/constants";
+
+const { ethers } = require("hardhat");
+const ipfsAPI = require("ipfs-http-client");
 
 const projectId = INFURA_ID;
 const projectSecret = INFURA_SECRET;

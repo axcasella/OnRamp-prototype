@@ -443,6 +443,8 @@ function App(props) {
           </Menu.Item>
         </Menu>
 
+        <Button onClick={() => console.log("clicked")}>Mint</Button>
+
         <Switch>
           <Route exact path="/">
             {/*

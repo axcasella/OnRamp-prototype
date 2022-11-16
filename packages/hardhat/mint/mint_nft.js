@@ -1,8 +1,6 @@
 /* eslint no-use-before-define: "warn" */
-import { INFURA_ID, INFURA_SECRET } from "../../react-app/src/constants";
-
-// import ethers from "hardhat";
-const { ethers } = require("hardhat");
+const { INFURA_ID, INFURA_SECRET } = require("../constants.js");
+const { ethers, getNamedAccounts } = require("hardhat");
 const ipfsAPI = require("ipfs-http-client");
 
 const projectId = INFURA_ID;
@@ -62,10 +60,3 @@ const mintKYCBadgeNFT = async (address) => {
 };
 
 module.exports = { mintKYCBadgeNFT };
-
-// mintKYCBadgeNFT()
-//   .then(() => process.exit(0))
-//   .catch((error) => {
-//     console.error(error);
-//     process.exit(1);
-//   });

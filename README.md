@@ -2,7 +2,6 @@
 
 > Build, mint, and send ERC721 NFT on Mumbai testnet / Polygon mainnet
 
-# 🏃‍♀️ Quick Start
 Required: [Node](https://nodejs.org/dist/latest-v16.x/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable) and [Git](https://git-scm.com/downloads)
 
 ```

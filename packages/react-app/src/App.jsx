@@ -3,6 +3,7 @@ import { Alert, Button, Card, Col, Input, List, Menu, Row } from "antd";
 import "antd/dist/antd.css";
 import React, { useCallback, useEffect, useState } from "react";
 import ReactJson from "react-json-view";
+import Select from "react-select";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
@@ -19,6 +20,7 @@ import {
   useOnBlock,
   useUserSigner,
 } from "./hooks";
+import { responsePathAsArray } from "graphql";
 
 const { BufferList } = require("bl");
 const ipfsAPI = require("ipfs-http-client");
@@ -126,6 +128,7 @@ function App(props) {
 
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
+
   /* 💵 This hook will get the price of ETH from 🦄 Uniswap: */
   const price = useExchangePrice(targetNetwork, mainnetProvider);
 
@@ -178,7 +181,6 @@ function App(props) {
 
   // 📟 Listen for broadcast events
   const transferEvents = useEventListener(readContracts, "YourCollectible", "Transfer", localProvider, 1);
-  console.log("📟 Transfer events:", transferEvents);
 
   //
   // 🧠 This effect will update yourCollectibles by polling when your balance changes
@@ -232,17 +234,15 @@ function App(props) {
       readContracts &&
       writeContracts
     ) {
-      console.log("__________________________________________________________________________");
-      console.log("INFURA ID: ", INFURA_ID);
-      console.log("INFURA Secret: ", INFURA_SECRET);
-      console.log("🌎 mainnetProvider", mainnetProvider);
-      console.log("🏠 localChainId", localChainId);
-      console.log("👩‍💼 selected address:", address);
-      console.log("🕵🏻‍♂️ selectedChainId:", selectedChainId);
-      console.log("💵 yourLocalBalance", yourLocalBalance ? ethers.utils.formatEther(yourLocalBalance) : "...");
-      console.log("💵 yourMainnetBalance", yourMainnetBalance ? ethers.utils.formatEther(yourMainnetBalance) : "...");
-      console.log("📝 readContracts", readContracts);
-      console.log("🔐 writeContracts", writeContracts);
+      // console.log("__________________________________________________________________________");
+      // console.log("🌎 mainnetProvider", mainnetProvider);
+      // console.log("🏠 localChainId", localChainId);
+      // console.log("👩‍💼 selected address:", address);
+      // console.log("🕵🏻‍♂️ selectedChainId:", selectedChainId);
+      // console.log("💵 yourLocalBalance", yourLocalBalance ? ethers.utils.formatEther(yourLocalBalance) : "...");
+      // console.log("💵 yourMainnetBalance", yourMainnetBalance ? ethers.utils.formatEther(yourMainnetBalance) : "...");
+      // console.log("📝 readContracts", readContracts);
+      // console.log("🔐 writeContracts", writeContracts);
     }
   }, [mainnetProvider, address, selectedChainId, yourLocalBalance, yourMainnetBalance, readContracts, writeContracts]);
 
@@ -384,6 +384,41 @@ function App(props) {
 
   const [transferToAddresses, setTransferToAddresses] = useState({});
 
+  // Dropdown select
+  const options = [
+    { value: "admin", label: "Admin" },
+    { value: "staff", label: "Non-admin Staff" },
+  ];
+
+  // Registration form
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState(["admin", "staff"]);
+  const handleRoleChange = e => {
+    setRole(e.value);
+  };
+
+  const registerUser = async event => {
+    event.preventDefault();
+
+    const response = await fetch("http://localhost:8000/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+        role,
+      }),
+    });
+
+    const data = await response.json();
+    console.log("DATA: ", data);
+  };
+
   return (
     <div className="App">
       {/* ✏️ Edit the header and change the title to your project name */}
@@ -391,12 +426,22 @@ function App(props) {
       {networkDisplay}
       <BrowserRouter>
         <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
-          <Menu.Item key="/">
+          <Menu.Item key="/register">
             <Link
               onClick={() => {
-                setRoute("/");
+                setRoute("/register");
               }}
-              to="/"
+              to="/register"
+            >
+              Register
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="/nft_badges">
+            <Link
+              onClick={() => {
+                setRoute("/nft_badges");
+              }}
+              to="/nft_badges"
             >
               NFT Badges
             </Link>
@@ -409,16 +454,6 @@ function App(props) {
               to="/transfers"
             >
               Transfers
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/ipfsup">
-            <Link
-              onClick={() => {
-                setRoute("/ipfsup");
-              }}
-              to="/ipfsup"
-            >
-              IPFS Upload
             </Link>
           </Menu.Item>
           <Menu.Item key="/ipfsdown">
@@ -446,7 +481,27 @@ function App(props) {
         <Button onClick={() => console.log("clicked")}>Mint</Button>
 
         <Switch>
-          <Route exact path="/">
+        <Route exact path="/register">
+            <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+              <div>
+                <h1>Register</h1>
+                <form onSubmit={registerUser}>
+                  <input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} />
+                  <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                  />
+                  <Select options={options} onChange={e => handleRoleChange(e)} />
+                  <input type="submit" value="Register" />
+                </form>
+              </div>
+            </div>
+          </Route>
+
+          <Route path="/nft_badges">
             {/*
                 <Contract/> component will automatically parse your ABI and give you a form to interact with it locally
             */}
@@ -541,27 +596,6 @@ function App(props) {
                 }}
               />
             </div>
-
-            <Button
-              style={{ margin: 8 }}
-              loading={sending}
-              size="large"
-              shape="round"
-              type="primary"
-              onClick={async () => {
-                console.log("UPLOADING...", yourJSON);
-                setSending(true);
-                setIpfsHash();
-                const result = await ipfs.add(JSON.stringify(yourJSON)); // addToIPFS(JSON.stringify(yourJSON))
-                if (result && result.path) {
-                  setIpfsHash(result.path);
-                }
-                setSending(false);
-                console.log("RESULT:", result);
-              }}
-            >
-              Upload to IPFS
-            </Button>
 
             <div style={{ padding: 16, paddingBottom: 150 }}>{ipfsHash}</div>
           </Route>

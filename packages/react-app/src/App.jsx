@@ -2,12 +2,22 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import { Alert, Button, Card, Col, Input, List, Menu, Row } from "antd";
 import "antd/dist/antd.css";
 import React, { useCallback, useEffect, useState } from "react";
-import ReactJson from "react-json-view";
-import Select from "react-select";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
-import { Account, Address, AddressInput, Contract, Faucet, GasGauge, Header, Ramp, ThemeSwitch } from "./components";
+import {
+  Login,
+  Register,
+  Account,
+  Address,
+  AddressInput,
+  Contract,
+  Faucet,
+  GasGauge,
+  Header,
+  Ramp,
+  ThemeSwitch,
+} from "./components";
 import { INFURA_ID, INFURA_SECRET, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
 import {
@@ -20,9 +30,6 @@ import {
   useOnBlock,
   useUserSigner,
 } from "./hooks";
-import { responsePathAsArray } from "graphql";
-
-import Login from "./components/Login";
 
 const { BufferList } = require("bl");
 const ipfsAPI = require("ipfs-http-client");
@@ -48,24 +55,6 @@ const targetNetwork = NETWORKS.mumbai;
 const DEBUG = true;
 const NETWORKCHECK = true;
 
-// EXAMPLE STARTING JSON:
-const STARTING_JSON = {
-  description: "It's actually a bison?",
-  external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-  image: "https://austingriffith.com/images/paintings/buffalo.jpg",
-  name: "Buffalo",
-  attributes: [
-    {
-      trait_type: "BackgroundColor",
-      value: "green",
-    },
-    {
-      trait_type: "Eyes",
-      value: "googly",
-    },
-  ],
-};
-
 // you usually go content.toString() after this...
 const getFromIPFS = async hashToGet => {
   for await (const file of ipfs.get(hashToGet)) {
@@ -81,10 +70,6 @@ const getFromIPFS = async hashToGet => {
 };
 
 // 🛰 providers
-if (DEBUG) console.log("📡 Connecting to Mainnet Ethereum");
-// const mainnetProvider = getDefaultProvider("mainnet", { infura: INFURA_ID, etherscan: ETHERSCAN_KEY, quorum: 1 });
-// const mainnetProvider = new InfuraProvider("mainnet",INFURA_ID);
-//
 // attempt to connect to our own scaffold eth rpc and if that fails fall back to infura...
 // Using StaticJsonRpcProvider as the chainId won't change see https://github.com/ethers-io/ethers.js/issues/901
 const scaffoldEthProvider = navigator.onLine
@@ -195,14 +180,9 @@ function App(props) {
       const collectibleUpdate = [];
       for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
         try {
-          console.log("Getting token index", tokenIndex);
           const tokenId = await readContracts.YourCollectible.tokenOfOwnerByIndex(address, tokenIndex);
-          console.log("tokenId", tokenId);
           const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
-          console.log("tokenURI", tokenURI);
-
           const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
-          console.log("ipfsHash", ipfsHash);
 
           const jsonManifestBuffer = await getFromIPFS(ipfsHash);
 
@@ -376,7 +356,6 @@ function App(props) {
     );
   }
 
-  const [yourJSON, setYourJSON] = useState(STARTING_JSON);
   const [sending, setSending] = useState();
   const [ipfsHash, setIpfsHash] = useState();
   const [ipfsDownHash, setIpfsDownHash] = useState();
@@ -385,41 +364,6 @@ function App(props) {
   const [ipfsContent, setIpfsContent] = useState();
 
   const [transferToAddresses, setTransferToAddresses] = useState({});
-
-  // Dropdown select
-  const options = [
-    { value: "admin", label: "Admin" },
-    { value: "staff", label: "Non-admin Staff" },
-  ];
-
-  // Registration form
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState(["admin", "staff"]);
-  const handleRoleChange = e => {
-    setRole(e.value);
-  };
-
-  const registerUser = async event => {
-    event.preventDefault();
-
-    const response = await fetch("http://localhost:8000/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-        role,
-      }),
-    });
-
-    const data = await response.json();
-    console.log("DATA: ", data);
-  };
 
   return (
     <div className="App">
@@ -484,26 +428,7 @@ function App(props) {
 
         <Switch>
           <Route exact path="/login" component={Login} />
-
-        <Route exact path="/register">
-            <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-              <div>
-                <h1>Register</h1>
-                <form onSubmit={registerUser}>
-                  <input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} />
-                  <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                  />
-                  <Select options={options} onChange={e => handleRoleChange(e)} />
-                  <input type="submit" value="Register" />
-                </form>
-              </div>
-            </div>
-          </Route>
+          <Route exact path="/register" component={Register} />
 
           <Route path="/nft_badges">
             {/*
@@ -582,27 +507,6 @@ function App(props) {
             </div>
           </Route>
 
-          <Route path="/ipfsup">
-            <div style={{ paddingTop: 32, width: 740, margin: "auto", textAlign: "left" }}>
-              <ReactJson
-                style={{ padding: 8 }}
-                src={yourJSON}
-                theme="pop"
-                enableClipboard={false}
-                onEdit={(edit, a) => {
-                  setYourJSON(edit.updated_src);
-                }}
-                onAdd={(add, a) => {
-                  setYourJSON(add.updated_src);
-                }}
-                onDelete={(del, a) => {
-                  setYourJSON(del.updated_src);
-                }}
-              />
-            </div>
-
-            <div style={{ padding: 16, paddingBottom: 150 }}>{ipfsHash}</div>
-          </Route>
           <Route path="/ipfsdown">
             <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
               <Input

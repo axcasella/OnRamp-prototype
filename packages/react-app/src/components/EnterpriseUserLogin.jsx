@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function Login() {
+export default function EnterpriseUserLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -33,7 +33,7 @@ export default function Login() {
   return (
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <div>
-        <h1>Login</h1>
+        <h1>Enterprise User Login</h1>
         <form onSubmit={loginUser}>
           <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
           <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />

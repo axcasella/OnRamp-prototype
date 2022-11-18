@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
 
-export default function Register() {
+export default function EnterpriseUserRegister() {
     const history = useHistory();
 
   // Registration form
@@ -47,7 +47,7 @@ export default function Register() {
   return (
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <div>
-        <h1>Register</h1>
+        <h1>Enterprise User Register</h1>
         <form onSubmit={registerUser}>
           <input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} />
           <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />

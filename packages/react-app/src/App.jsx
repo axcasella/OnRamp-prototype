@@ -1,11 +1,11 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import { Alert, Button } from "antd";
+import { Alert, Button, Menu } from "antd";
 import "antd/dist/antd.css";
 import React, { useCallback, useEffect, useState } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
-import { Login, Register, UserDashboard, Account, Header } from "./components";
+import { EnterpriseUserLogin, EnterpriseUserRegister, RegularUserOnboard, UserDashboard, Account, Header } from "./components";
 import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { useExchangePrice, useUserSigner } from "./hooks";
 
@@ -63,6 +63,7 @@ function App() {
 
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
+  const [route, setRoute] = useState();
 
   /* 💵 This hook will get the price of ETH from 🦄 Uniswap: */
   // const price = useExchangePrice(targetNetwork, mainnetProvider);
@@ -182,10 +183,47 @@ function App() {
     <div className="App">
       <Header />
       {networkDisplay}
+
       <BrowserRouter>
+        <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
+          <Menu.Item key="/EnterpriseUserRegister">
+            <Link
+              onClick={() => {
+                setRoute("/EnterpriseUserRegister");
+              }}
+              to="/EnterpriseUserRegister"
+            >
+              Enterprise User Registration
+            </Link>
+          </Menu.Item>
+
+          <Menu.Item key="/EnterpriseUserLogin">
+            <Link
+              onClick={() => {
+                setRoute("/EnterpriseUserLogin");
+              }}
+              to="/EnterpriseUserLogin"
+            >
+              Enterprise User Login
+            </Link>
+          </Menu.Item>
+          
+          <Menu.Item key="/RegularUserOnboard">
+            <Link
+              onClick={() => {
+                setRoute("/RegularUserOnboard");
+              }}
+              to="/RegularUserOnboard"
+            >
+              Regular User Onboarding
+            </Link>
+          </Menu.Item>
+        </Menu>
         <Switch>
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Register} />
+          <Route exact path="/" component={EnterpriseUserLogin} />
+          <Route exact path="/EnterpriseUserLogin" component={EnterpriseUserLogin} />
+          <Route exact path="/EnterpriseUserRegister" component={EnterpriseUserRegister} />
+          <Route exact path="/RegularUserOnboard" component={RegularUserOnboard} />
           <Route exact path="/userDashboard" component={UserDashboard} />
         </Switch>
       </BrowserRouter>

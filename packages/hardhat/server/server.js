@@ -3,6 +3,8 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
+const jwt = require("jsonwebtoken");
+
 const mongoose = require("mongoose");
 const UserRegistration = require("./models/user.models");
 
@@ -33,7 +35,7 @@ app.post("/api/register", async (req, res) => {
       password: req.body.password,
       role: req.body.role,
     });
-    res.json({ status: "user registered" });
+    res.json({ status: "ok" });
   } catch (err) {
     console.error("User registration error ", err);
     res.json({ status: "user registration failed" });
@@ -47,7 +49,14 @@ app.post("/api/login", async (req, res) => {
   });
 
   if (user) {
-    res.json({ status: "ok", user: true });
+    const token = jwt.sign(
+      {
+        name: user.name,
+        email: user.email,
+      },
+      "secret123"
+    );
+    res.json({ status: "ok", user: token });
   } else {
     res.json({ status: "error", user: false });
   }

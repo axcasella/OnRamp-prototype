@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import Select from "react-select";
 
 export default function Register() {
-  useEffect(() => {}, []);
+    const history = useHistory();
 
   // Registration form
   const [name, setName] = useState("");
@@ -36,7 +37,11 @@ export default function Register() {
     });
 
     const data = await response.json();
-    console.log("DATA: ", data);
+    if (data.status === "ok") {
+        history.push("/login");
+    } else {
+        alert("Registration failed");
+    }
   };
 
   return (

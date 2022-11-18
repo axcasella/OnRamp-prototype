@@ -24,6 +24,7 @@
     "express": "^4.18.2",
     "hardhat": "2.4.0",
     "hardhat-deploy": "^0.8.6",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.7.2",
     "node-watch": "^0.7.0",
     "nodemon": "^2.0.20",

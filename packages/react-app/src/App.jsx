@@ -8,6 +8,7 @@ import "./App.css";
 import {
   Login,
   Register,
+  UserDashboard,
   Account,
   Address,
   AddressInput,
@@ -158,13 +159,13 @@ function App(props) {
   const writeContracts = useContractLoader(userSigner, { chainId: localChainId });
 
   // If you want to call a function on a new block
-  useOnBlock(mainnetProvider, () => {
-    console.log(`⛓ A new mainnet block is here: ${mainnetProvider._lastBlockNumber}`);
-  });
+  // useOnBlock(mainnetProvider, () => {
+  //   console.log(`⛓ A new mainnet block is here: ${mainnetProvider._lastBlockNumber}`);
+  // });
 
   // keep track of a variable from the contract in the local React state:
   const balance = useContractReader(readContracts, "YourCollectible", "balanceOf", [address]);
-  console.log("🤗 balance:", balance);
+  // console.log("🤗 balance:", balance);
 
   // 📟 Listen for broadcast events
   const transferEvents = useEventListener(readContracts, "YourCollectible", "Transfer", localProvider, 1);
@@ -429,7 +430,7 @@ function App(props) {
         <Switch>
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
-
+          <Route exact path="/dashboard" component={UserDashboard} />
           <Route path="/nft_badges">
             {/*
                 <Contract/> component will automatically parse your ABI and give you a form to interact with it locally

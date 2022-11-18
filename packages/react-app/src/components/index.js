@@ -19,3 +19,4 @@ export { default as Wallet } from "./Wallet";
 export { default as L2Bridge } from "./L2Bridge";
 export { default as Login } from "./Login";
 export { default as Register } from "./Register";
+export { default as UserDashboard } from "./UserDashboard";

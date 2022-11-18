@@ -22,6 +22,8 @@ import {
 } from "./hooks";
 import { responsePathAsArray } from "graphql";
 
+import Login from "./components/Login";
+
 const { BufferList } = require("bl");
 const ipfsAPI = require("ipfs-http-client");
 
@@ -481,6 +483,8 @@ function App(props) {
         <Button onClick={() => console.log("clicked")}>Mint</Button>
 
         <Switch>
+          <Route exact path="/login" component={Login} />
+
         <Route exact path="/register">
             <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <div>

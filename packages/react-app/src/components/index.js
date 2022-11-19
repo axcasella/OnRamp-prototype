@@ -22,3 +22,4 @@ export { default as EnterpriseUserRegister } from "./EnterpriseUserRegister";
 export { default as RegularUserOnboard } from "./RegularUserOnboard";
 export { default as UserDashboard } from "./UserDashboard";
 export { default as PersonalDataForm } from "./PersonalDataForm";
+export { default as MyPersonalData } from "./MyPersonalData";

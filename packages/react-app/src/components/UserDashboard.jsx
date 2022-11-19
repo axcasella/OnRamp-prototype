@@ -3,7 +3,7 @@ import { Button, Card, Input, List, Menu } from "antd";
 import { BrowserRouter, Link, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import jwt from "jsonwebtoken";
 import { useContractLoader, useContractReader, useEventListener, useGasPrice, useUserSigner, useExchangePrice } from "../hooks";
-import { Address, AddressInput, Contract, Account, PersonalDataForm } from ".";
+import { Address, AddressInput, Contract, Account, PersonalDataForm, MyPersonalData } from ".";
 import { INFURA_ID, INFURA_SECRET, NETWORKS } from "../constants";
 import { Transactor } from "../helpers";
 
@@ -180,7 +180,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <BrowserRouter>
         <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
-          <Menu.Item key="/userDashboard/kyc">
+          <Menu.Item key="/userDashboard/personalDataForm">
             <Link
               onClick={() => {
                 setRoute("/userDashboard/personalDataForm");
@@ -188,6 +188,16 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
               to="/userDashboard/personalDataForm"
             >
               Enter KYC
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="/userDashboard/MyPersonalData">
+            <Link
+              onClick={() => {
+                setRoute("/userDashboard/MyPersonalData");
+              }}
+              to="/userDashboard/MyPersonalData"
+            >
+              My KYC Info
             </Link>
           </Menu.Item>
           <Menu.Item key="/userDashboard/nft_badges">
@@ -235,6 +245,9 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
         <Switch>
           <Route path="/userDashboard/personalDataForm">
             <PersonalDataForm />
+          </Route>
+          <Route path="/userDashboard/MyPersonalData">
+            <MyPersonalData />
           </Route>
           <Route path="/userDashboard/nft_badges">
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>

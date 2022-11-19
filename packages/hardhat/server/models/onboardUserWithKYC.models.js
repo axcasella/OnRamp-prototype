@@ -6,7 +6,7 @@ const OnboardUserWithKYC = new mongoose.Schema(
     lastname: { type: String, required: true },
     address: { type: String, required: true },
     ssn: { type: String, required: true, unique: true },
-    walletAddress: { type: String, required: true },
+    walletAddress: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     city: { type: String, required: true },
     state: { type: String, required: true },

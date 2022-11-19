@@ -87,6 +87,23 @@ app.post("/api/onboardUserWithKYC", async (req, res) => {
   }
 });
 
+app.get(`/api/getMyKYCData/walletAddress/:walletAddress`, async (req, res) => {
+  try {
+    const userData = await OnboardUserWithKYC.findOne({
+      walletAddress: req.params.walletAddress,
+    });
+
+    if (userData) {
+      console.log("Found: ", userData);
+
+      res.status(200).send(userData);
+    }
+  } catch (err) {
+    console.error("Failed to get user KYC data ", err);
+    res.json({ status: "Failed to get user KYC data" });
+  }
+});
+
 app.post("/api/mint_kyc_nft", async (req, res) => {
   console.log("Wallet: ", req.body.walletAddress);
   try {

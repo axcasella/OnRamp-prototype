@@ -14,28 +14,23 @@ export default function RegularUserOnboard({ web3Modal, loadWeb3Modal, userSigne
     async function getAddress() {
       if (userSigner) {
         const newAddress = await userSigner.getAddress();
-        console.log("New Address: ", newAddress);
         setAddress(newAddress);
-
-        console.log("INSIDE User Dashboard userSigner 2", userSigner)
       }
     }
     getAddress();
-    console.log("INSIDE User Dashboard userSigner 1", userSigner)
-
-    console.log("Curr Address: ", address);
   }, [userSigner]);
 
   const logoutOfWeb3Modal = async () => {
     await web3Modal.clearCachedProvider();
   
     history.replace("/RegularUserOnboard");
-  
+    localStorage.removeItem("walletAddress");
+
     setTimeout(() => {
       window.location.reload();
     }, 1);
   };
-  
+
   const modalButtons = [];
   if (web3Modal.cachedProvider) {
     modalButtons.push(

@@ -7,7 +7,7 @@ export default function EnterpriseUserLogin() {
   const loginUser = async event => {
     event.preventDefault();
 
-    const response = await fetch("http://localhost:8000/api/login", {
+    const response = await fetch("http://localhost:8000/api/loginEnterpriseUser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

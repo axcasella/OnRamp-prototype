@@ -3,7 +3,7 @@ import { Button, Card, Input, List, Menu } from "antd";
 import { BrowserRouter, Link, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import jwt from "jsonwebtoken";
 import { useContractLoader, useContractReader, useEventListener, useGasPrice, useUserSigner, useExchangePrice } from "../hooks";
-import { Address, AddressInput, Contract, Account } from ".";
+import { Address, AddressInput, Contract, Account, PersonalDataForm } from ".";
 import { INFURA_ID, INFURA_SECRET, NETWORKS } from "../constants";
 import { Transactor } from "../helpers";
 
@@ -65,12 +65,13 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
     await web3Modal.clearCachedProvider();
   
     history.replace("/RegularUserOnboard");
-  
+    localStorage.removeItem("walletAddress");
+
     setTimeout(() => {
       window.location.reload();
     }, 1);
   };
-  
+
   const location = useLocation();
 
   const [route, setRoute] = useState();
@@ -84,8 +85,6 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
       setInjectedProvider(new ethers.providers.Web3Provider(provider));
     }
     setProvider();
-
-    console.log("Curr Address: ", address);
   }, []);
 
   // const price = useExchangePrice(targetNetwork, mainnetProvider);
@@ -99,8 +98,6 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
 
   /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
   const gasPrice = useGasPrice(targetNetwork, "fast");
-
-  console.log("INSIDE User Dashboard userSigner", userSigner)
 
   // The transactor wraps transactions and provides notificiations
   const tx = Transactor(userSigner, gasPrice);
@@ -118,6 +115,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
       if (userSigner) {
         const newAddress = await userSigner.getAddress();
         setAddress(newAddress);
+        localStorage.setItem("walletAddress", newAddress);
       }
     }
     getAddress();
@@ -182,6 +180,16 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <BrowserRouter>
         <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
+          <Menu.Item key="/userDashboard/kyc">
+            <Link
+              onClick={() => {
+                setRoute("/userDashboard/personalDataForm");
+              }}
+              to="/userDashboard/personalDataForm"
+            >
+              Enter KYC
+            </Link>
+          </Menu.Item>
           <Menu.Item key="/userDashboard/nft_badges">
             <Link
               onClick={() => {
@@ -189,7 +197,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
               }}
               to="/userDashboard/nft_badges"
             >
-              NFT Badges
+              My Badges
             </Link>
           </Menu.Item>
           <Menu.Item key="/userDashboard/transfers">
@@ -223,10 +231,11 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
             </Link>
           </Menu.Item>
         </Menu>
-
-        <Button onClick={() => console.log("clicked")}>Mint</Button>
-
+        
         <Switch>
+          <Route path="/userDashboard/personalDataForm">
+            <PersonalDataForm />
+          </Route>
           <Route path="/userDashboard/nft_badges">
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <List

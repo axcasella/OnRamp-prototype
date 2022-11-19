@@ -23,7 +23,7 @@ export default function EnterpriseUserRegister() {
   const registerUser = async event => {
     event.preventDefault();
 
-    const response = await fetch("http://localhost:8000/api/register", {
+    const response = await fetch("http://localhost:8000/api/registerEnterpriseUser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

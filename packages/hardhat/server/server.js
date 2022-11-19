@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 
 const mongoose = require("mongoose");
 const UserRegistration = require("./models/user.models");
+const OnboardUserWithKYC = require("./models/onboardUserWithKYC.models");
 
 app.use(cors());
 app.use(express.json());
@@ -26,10 +27,10 @@ connectToMongo();
 
 const { mintKYCBadgeNFT } = require("../mint/mint_nft.js");
 
-app.post("/api/register", async (req, res) => {
+app.post("/api/registerEnterpriseUser", async (req, res) => {
   console.log(req.body);
   try {
-    const user = await UserRegistration.create({
+    await UserRegistration.create({
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
@@ -42,7 +43,7 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-app.post("/api/login", async (req, res) => {
+app.post("/api/loginEnterpriseUser", async (req, res) => {
   const user = await UserRegistration.findOne({
     email: req.body.email,
     password: req.body.password,
@@ -62,10 +63,39 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+app.post("/api/onboardUserWithKYC", async (req, res) => {
+  console.log(req.body);
+  try {
+    await OnboardUserWithKYC.create({
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      email: req.body.email,
+      birthdate: req.body.birthdate,
+      country: req.body.country,
+      address: req.body.address,
+      state: req.body.state,
+      city: req.body.city,
+      zip: req.body.zip,
+      ssn: req.body.ssn,
+      phone: req.body.phone,
+      walletAddress: req.body.walletAddress,
+    });
+    res.json({ status: "ok" });
+  } catch (err) {
+    console.error("User registration error ", err);
+    res.json({ status: "user registration failed" });
+  }
+});
+
 app.post("/api/mint_kyc_nft", async (req, res) => {
-  let address = "0x943468B770449bFc6B9fF168A428fBB45BF644f5";
-  await mintKYCBadgeNFT(address);
-  res.json({ status: "minted" });
+  console.log("Wallet: ", req.body.walletAddress);
+  try {
+    await mintKYCBadgeNFT(req.body.walletAddress);
+    res.json({ status: "minted" });
+  } catch (err) {
+    console.error("Mint NFT error ", err);
+    res.json({ status: "Mint NFT failed" });
+  }
 });
 
 app.listen(8000, () => {

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Select from "react-select";
 
-export default function PersonalDataForm({ web3ModalWalletAddress }) {
+export default function PersonalDataForm() {
+  const walletAddress = localStorage.getItem("walletAddress");
+
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -14,35 +16,64 @@ export default function PersonalDataForm({ web3ModalWalletAddress }) {
   const [city, setCity] = useState("");
   const [ssn, setSSN] = useState("");
 
-  const onboardUser = async event => {
-    // event.preventDefault();
+  const mintNFTBadge = async () => {
+    const response = await fetch("http://localhost:8000/api/mint_kyc_nft", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        walletAddress,
+      }),
+    });
 
-    // const response = await fetch("http://localhost:8000/api/register", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     name,
-    //     email,
-    //     password,
-    //     role,
-    //   }),
-    // });
+    const data = await response.json();
+    if (data.status === "minted") {
+        console.log("Minted badge");
+    } else {
+        alert("Failed to mint badge failed");
+    }
+  };
 
-    // const data = await response.json();
-    // if (data.status === "ok") {
-    //     history.push("/login");
-    // } else {
-    //     alert("Registration failed");
-    // }
+  const onboardUserWithKYC = async event => {
+    event.preventDefault();
+
+    const response = await fetch("http://localhost:8000/api/onboardUserWithKYC", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        firstname,
+        lastname,
+        email,
+        birthdate,
+        country,
+        address,
+        state,
+        city,
+        zip,
+        ssn,
+        phone,
+        walletAddress,
+      }),
+    });
+
+    const data = await response.json();
+    if (data.status === "ok") {
+        console.log("ok");
+    } else {
+        alert("User onboarding failed");
+    }
+
+    await mintNFTBadge(walletAddress);
   };
 
   return (
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <div>
-        <form onSubmit={onboardUser}>
-            <p>Address: {web3ModalWalletAddress}</p>
+        <form onSubmit={onboardUserWithKYC}>
+            <p>Wallet Address: {walletAddress}</p>
           <input type="text" placeholder="First name" value={firstname} onChange={e => setFirstName(e.target.value)} />
           <input type="text" placeholder="Last name" value={lastname} onChange={e => setLastName(e.target.value)} />
           <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />

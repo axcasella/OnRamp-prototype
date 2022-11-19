@@ -163,6 +163,7 @@ function App() {
       await web3Modal.clearCachedProvider();
 
       history.replace("/RegularUserOnboard");
+      localStorage.removeItem("walletAddress");
 
       setTimeout(() => {
         window.location.reload();

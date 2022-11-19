@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Button, Card, Input, List, Menu } from "antd";
 import { BrowserRouter, Link, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import jwt from "jsonwebtoken";
-import jwtDecode from "jwt-decode";
-import { useContractLoader, useContractReader, useEventListener, useGasPrice, useUserSigner } from "../hooks";
-import { Address, AddressInput, Contract } from ".";
+import { useContractLoader, useContractReader, useEventListener, useGasPrice, useUserSigner, useExchangePrice } from "../hooks";
+import { Address, AddressInput, Contract, Account } from ".";
 import { INFURA_ID, INFURA_SECRET, NETWORKS } from "../constants";
 import { Transactor } from "../helpers";
 
@@ -37,7 +36,6 @@ const ipfs = ipfsAPI({
 // you usually go content.toString() after this...
 const getFromIPFS = async hashToGet => {
   for await (const file of ipfs.get(hashToGet)) {
-    console.log(file.path);
     if (!file.content) continue;
     const content = new BufferList();
     for await (const chunk of file.content) {
@@ -59,19 +57,38 @@ const mainnetInfura = navigator.onLine
   : null;
 // ( ⚠️ Getting "failed to meet quorum" errors? Check your INFURA_I
 
-export default function UserDashboard() {
+export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) {
   const mainnetProvider = scaffoldEthProvider && scaffoldEthProvider._network ? scaffoldEthProvider : mainnetInfura;
 
-  console.log("Mainnet provider ", mainnetProvider);
-
   const history = useHistory();
+  const logoutOfWeb3Modal = async () => {
+    await web3Modal.clearCachedProvider();
+  
+    history.replace("/RegularUserOnboard");
+  
+    setTimeout(() => {
+      window.location.reload();
+    }, 1);
+  };
+  
   const location = useLocation();
 
   const [route, setRoute] = useState();
   const [address, setAddress] = useState();
 
   const [injectedProvider, setInjectedProvider] = useState();
-  const userSigner = useUserSigner(injectedProvider, localProvider);
+
+  useEffect(() => {
+    async function setProvider() {
+      const provider = await web3Modal.connect();
+      setInjectedProvider(new ethers.providers.Web3Provider(provider));
+    }
+    setProvider();
+
+    console.log("Curr Address: ", address);
+  }, []);
+
+  // const price = useExchangePrice(targetNetwork, mainnetProvider);
 
   const [ipfsDownHash, setIpfsDownHash] = useState();
   const [sending, setSending] = useState();
@@ -82,6 +99,8 @@ export default function UserDashboard() {
 
   /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
   const gasPrice = useGasPrice(targetNetwork, "fast");
+
+  console.log("INSIDE User Dashboard userSigner", userSigner)
 
   // The transactor wraps transactions and provides notificiations
   const tx = Transactor(userSigner, gasPrice);
@@ -143,7 +162,6 @@ export default function UserDashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("Decoded: ", jwtDecode(token));
 
     if (token) {
       const loggedInUser = jwt.decode(token);
@@ -152,7 +170,7 @@ export default function UserDashboard() {
         history.replace("/login");
       } else {
         // populate user dashboard
-        console.log("show dashboard");
+        console.log("show dashboard for address ", address);
       }
     } else {
       console.log("no token found");
@@ -251,7 +269,6 @@ export default function UserDashboard() {
                         />
                         <Button
                           onClick={() => {
-                            console.log("writeContracts", writeContracts);
                             tx(writeContracts.YourCollectible.transferFrom(address, transferToAddresses[id], id));
                           }}
                         >
@@ -331,6 +348,21 @@ export default function UserDashboard() {
           </Route>
         </Switch>
       </BrowserRouter>
+
+      {/* account and wallet */}
+      <div style={{ position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>
+        <Account
+          address={address}
+          localProvider={localProvider}
+          userSigner={userSigner}
+          mainnetProvider={mainnetProvider}
+          // price={price}
+          web3Modal={web3Modal}
+          loadWeb3Modal={loadWeb3Modal}
+          logoutOfWeb3Modal={logoutOfWeb3Modal}
+          blockExplorer={blockExplorer}
+        />
+      </div>
     </div>
   );
 }

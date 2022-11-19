@@ -1,9 +1,10 @@
-import WalletConnectProvider from "@walletconnect/web3-provider";
 import { Alert, Button, Menu } from "antd";
 import "antd/dist/antd.css";
 import React, { useCallback, useEffect, useState } from "react";
-import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import Web3Modal from "web3modal";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+
+import { BrowserRouter, Route, Switch, Link, useHistory } from "react-router-dom";
 import "./App.css";
 import { EnterpriseUserLogin, EnterpriseUserRegister, RegularUserOnboard, UserDashboard, Account, Header } from "./components";
 import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
@@ -34,9 +35,7 @@ const localProviderUrl = targetNetwork.rpcUrl;
 const localProviderUrlFromEnv = process.env.REACT_APP_PROVIDER ? process.env.REACT_APP_PROVIDER : localProviderUrl;
 if (DEBUG) console.log("🏠 Connecting to provider:", localProviderUrlFromEnv);
 const localProvider = new ethers.providers.StaticJsonRpcProvider(localProviderUrlFromEnv);
-
-// 🔭 block explorer URL
-const blockExplorer = targetNetwork.blockExplorer;
+console.log("LOCAL PROVIDER: ", localProvider);
 
 const web3Modal = new Web3Modal({
   // network: "mainnet", // optional
@@ -51,15 +50,8 @@ const web3Modal = new Web3Modal({
   },
 });
 
-const logoutOfWeb3Modal = async () => {
-  await web3Modal.clearCachedProvider();
-  setTimeout(() => {
-    window.location.reload();
-  }, 1);
-};
-
 function App() {
-  const mainnetProvider = scaffoldEthProvider && scaffoldEthProvider._network ? scaffoldEthProvider : mainnetInfura;
+  const history = useHistory();
 
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
@@ -70,6 +62,7 @@ function App() {
 
   // Use your injected provider from 🦊 Metamask or if you don't have it then instantly generate a 🔥 burner wallet.
   const userSigner = useUserSigner(injectedProvider, localProvider);
+  console.log("USER SIGNER: ", userSigner);
 
   useEffect(() => {
     async function getAddress() {
@@ -146,7 +139,7 @@ function App() {
     }
   } else {
     networkDisplay = (
-      <div style={{ zIndex: -1, position: "absolute", right: 154, top: 28, padding: 16, color: targetNetwork.color }}>
+      <div style={{ zIndex: -1, position: "absolute", left: 20, top: 40, padding: 16, color: targetNetwork.color }}>
         {targetNetwork.name}
       </div>
     );
@@ -166,6 +159,16 @@ function App() {
       setInjectedProvider(new ethers.providers.Web3Provider(provider));
     });
 
+    const logoutOfWeb3Modal = async () => {
+      await web3Modal.clearCachedProvider();
+
+      history.replace("/RegularUserOnboard");
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1);
+    };
+
     // Subscribe to session disconnection
     provider.on("disconnect", (code, reason) => {
       console.log(code, reason);
@@ -178,7 +181,6 @@ function App() {
       loadWeb3Modal();
     }
   }, [loadWeb3Modal]);
-
   return (
     <div className="App">
       <Header />
@@ -207,7 +209,7 @@ function App() {
               Enterprise User Login
             </Link>
           </Menu.Item>
-          
+
           <Menu.Item key="/RegularUserOnboard">
             <Link
               onClick={() => {
@@ -223,25 +225,20 @@ function App() {
           <Route exact path="/" component={EnterpriseUserLogin} />
           <Route exact path="/EnterpriseUserLogin" component={EnterpriseUserLogin} />
           <Route exact path="/EnterpriseUserRegister" component={EnterpriseUserRegister} />
-          <Route exact path="/RegularUserOnboard" component={RegularUserOnboard} />
-          <Route exact path="/userDashboard" component={UserDashboard} />
+          <Route
+            exact
+            path="/RegularUserOnboard"
+            render={() => (
+              <RegularUserOnboard web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} userSigner={userSigner} />
+            )}
+          />
+          <Route
+            exact
+            path="/userDashboard"
+            render={() => <UserDashboard web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} userSigner={userSigner} />}
+          />
         </Switch>
       </BrowserRouter>
-
-      {/* account and wallet */}
-      <div style={{ position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>
-        <Account
-          address={address}
-          localProvider={localProvider}
-          userSigner={userSigner}
-          mainnetProvider={mainnetProvider}
-          // price={price}
-          web3Modal={web3Modal}
-          loadWeb3Modal={loadWeb3Modal}
-          logoutOfWeb3Modal={logoutOfWeb3Modal}
-          blockExplorer={blockExplorer}
-        />
-      </div>
     </div>
   );
 }

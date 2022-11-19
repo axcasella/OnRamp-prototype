@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Select from "react-select";
 
-export default function PersonalDataForm() {
+export default function PersonalDataForm({ web3ModalWalletAddress }) {
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -42,6 +42,7 @@ export default function PersonalDataForm() {
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <div>
         <form onSubmit={onboardUser}>
+            <p>Address: {web3ModalWalletAddress}</p>
           <input type="text" placeholder="First name" value={firstname} onChange={e => setFirstName(e.target.value)} />
           <input type="text" placeholder="Last name" value={lastname} onChange={e => setLastName(e.target.value)} />
           <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />

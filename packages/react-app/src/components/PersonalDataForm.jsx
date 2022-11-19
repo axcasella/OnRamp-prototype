@@ -66,7 +66,7 @@ export default function PersonalDataForm() {
         alert("User onboarding failed");
     }
 
-    await mintNFTBadge(walletAddress);
+    // await mintNFTBadge(walletAddress);
   };
 
   return (

@@ -1,9 +1,25 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { Table, Button } from "antd";
+import jwt from "jsonwebtoken";
 
 export default function EnterpriseDashboard() {
+  const history = useHistory();
+
   const [tableDataSrc, setTableDataSrc] = useState();
   const [loading, setLoading] = useState(true);
+  const [loggedInUser, setLoggedInUser] = useState();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+        const tokenUser = jwt.decode(token);
+        setLoggedInUser(tokenUser);
+    } else {
+        history.replace("/EnterpriseUserLogin");
+    }
+  }, []);
 
   const getAllWalletUsers = async () => {
     const response = await fetch(`http://localhost:8000/api/getAllWalletUsers`, {
@@ -21,6 +37,7 @@ export default function EnterpriseDashboard() {
       setTableDataSrc(
         [data].map(row => ({
           walletAddress: row[0].walletAddress,
+          displayText: row[0].consentedOrgs.includes(loggedInUser.org) ? "View data" : "Request permission",
         })),
       );
       setLoading(false);
@@ -41,19 +58,27 @@ export default function EnterpriseDashboard() {
       width: 500,
     },
     {
-      title: "Available Action",
-      dataIndex: "availableAction",
-      key: "availableAction",
-      width: 100,
-      render: (text, row, index) => <Button type="primary">Request</Button>,
-      onCell: (record, rowIndex) => {
-        return {
-          onClick: () => {
-            console.log("Clicked: ", record, rowIndex);
-          },
-        };
-      },
+        title: "Available Action",
+        dataIndex: "displayText",
+        key: "displayText",
+        width: 100,
     },
+    // {
+    //   title: "Available Action",
+    //   dataIndex: "availableAction",
+    //   key: "availableAction",
+    //   width: 100,
+    //   render: (text, record) => {
+    //     return `${text}`;
+    //   },
+    //   onCell: (record, rowIndex) => {
+    //     return {
+    //       onClick: () => {
+    //         console.log("Clicked: ", record, rowIndex);
+    //       },
+    //     };
+    //   },
+    // },
   ];
 
   return (

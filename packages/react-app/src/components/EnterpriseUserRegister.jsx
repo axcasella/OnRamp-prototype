@@ -3,12 +3,13 @@ import { useHistory } from "react-router-dom";
 import Select from "react-select";
 
 export default function EnterpriseUserRegister() {
-    const history = useHistory();
+  const history = useHistory();
 
   // Registration form
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [org, setOrg] = useState("");
   const [role, setRole] = useState(["admin", "staff"]);
   const handleRoleChange = e => {
     setRole(e.value);
@@ -33,6 +34,7 @@ export default function EnterpriseUserRegister() {
         email,
         password,
         role,
+        org,
       }),
     });
 
@@ -52,6 +54,7 @@ export default function EnterpriseUserRegister() {
           <input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} />
           <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
           <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+          <input type="text" placeholder="Your company" value={org} onChange={e => setOrg(e.target.value)} />
           <Select options={options} onChange={e => handleRoleChange(e)} />
           <input type="submit" value="Register" />
         </form>

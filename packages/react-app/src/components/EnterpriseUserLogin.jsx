@@ -4,7 +4,7 @@ export default function EnterpriseUserLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const loginUser = async event => {
+  const loginEnterpriseUser = async event => {
     event.preventDefault();
 
     const response = await fetch("http://localhost:8000/api/loginEnterpriseUser", {
@@ -34,7 +34,7 @@ export default function EnterpriseUserLogin() {
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <div>
         <h1>Enterprise User Login</h1>
-        <form onSubmit={loginUser}>
+        <form onSubmit={loginEnterpriseUser}>
           <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
           <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
           <input type="submit" value="Login" />

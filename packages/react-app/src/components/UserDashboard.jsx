@@ -165,7 +165,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
       const loggedInUser = jwt.decode(token);
       if (!loggedInUser) {
         localStorage.removeItem("token");
-        history.replace("/login");
+        history.replace("/EnterpriseUserLogin");
       } else {
         // populate user dashboard
         console.log("show dashboard for address ", address);

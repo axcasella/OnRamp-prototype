@@ -6,7 +6,7 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 
 const mongoose = require("mongoose");
-const UserRegistration = require("./models/enterpriseUser.models");
+const EnterpriseUserRegistration = require("./models/enterpriseUser.models");
 const OnboardUserWithKYC = require("./models/onboardUserWithKYC.models");
 const UserKeys = require("./models/userKeys.models");
 
@@ -36,11 +36,12 @@ const { mintKYCBadgeNFT } = require("../mint/mint_nft.js");
 
 app.post("/api/registerEnterpriseUser", async (req, res) => {
   try {
-    await UserRegistration.create({
+    await EnterpriseUserRegistration.create({
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
       role: req.body.role,
+      org: req.body.org,
     });
     res.json({ status: "ok" });
   } catch (err) {
@@ -50,7 +51,7 @@ app.post("/api/registerEnterpriseUser", async (req, res) => {
 });
 
 app.post("/api/loginEnterpriseUser", async (req, res) => {
-  const user = await UserRegistration.findOne({
+  const user = await EnterpriseUserRegistration.findOne({
     email: req.body.email,
     password: req.body.password,
   });

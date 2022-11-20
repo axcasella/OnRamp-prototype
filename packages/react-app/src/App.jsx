@@ -6,7 +6,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import { BrowserRouter, Route, Switch, Link, useHistory } from "react-router-dom";
 import "./App.css";
-import { EnterpriseUserLogin, EnterpriseUserRegister, RegularUserOnboard, UserDashboard, Account, Header } from "./components";
+import { EnterpriseUserLogin, EnterpriseUserRegister, RegularUserOnboard, UserDashboard, EnterpriseDashboard, Header, EnterpriseViewKYCData } from "./components";
 import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { useExchangePrice, useUserSigner } from "./hooks";
 
@@ -227,6 +227,8 @@ function App() {
             path="/userDashboard"
             render={() => <UserDashboard web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} userSigner={userSigner} />}
           />
+          <Route exact path="/EnterpriseDashboard" render={() => <EnterpriseDashboard />} />
+          <Route exact path="/enterpriseUserDashboard" render={() => <EnterpriseViewKYCData />} />
         </Switch>
       </BrowserRouter>
     </div>

@@ -14,6 +14,7 @@ const OnboardUserWithKYC = new mongoose.Schema(
     zip: { type: String, required: true },
     birthdate: { type: String, required: true },
     phone: { type: String, required: true },
+    consentedOrgs: { type: Array },
   },
   { collection: "user-kyc-data" }
 );

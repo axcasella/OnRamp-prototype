@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button } from "antd";
 
-export default function MyPersonalData() {
-  const walletAddress = localStorage.getItem("walletAddress");
+export default function EnterpriseViewKYCData() {
+  const walletAddress = "0x48897923360656e77882bA5783E36530548A9F6F";
 
   const [tableDataSrc, setTableDataSrc] = useState();
   const [loading, setLoading] = useState(true);
@@ -167,14 +167,14 @@ export default function MyPersonalData() {
   return (
     <div>
       {loading ? (
-        "Loading KYC data"
+        "Loading User's KYC data"
       ) : (
         <div>
           <Table columns={columns} dataSource={tableDataSrc} />
           {showDecryptButton ? (
             <Button onClick={getMyPersonalDecryptedData}> Decrypt my data </Button>
           ) : (
-            <p>Only you and dapps you have given access to can see your decrypted data</p>
+            <p>Your dapp has access to this user's data</p>
           )}
         </div>
       )}

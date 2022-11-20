@@ -35,7 +35,6 @@ const {
 const { mintKYCBadgeNFT } = require("../mint/mint_nft.js");
 
 app.post("/api/registerEnterpriseUser", async (req, res) => {
-  console.log(req.body);
   try {
     await UserRegistration.create({
       name: req.body.name,
@@ -71,10 +70,7 @@ app.post("/api/loginEnterpriseUser", async (req, res) => {
 });
 
 app.post("/api/onboardUserWithKYC", async (req, res) => {
-  console.log(req.body);
-
   const { publicKey, privateKey } = await generatePubPrivKeys();
-  console.log("KEYS: ", publicKey, privateKey);
 
   if (publicKey && privateKey) {
     try {
@@ -83,8 +79,6 @@ app.post("/api/onboardUserWithKYC", async (req, res) => {
         publicKey: JSON.stringify(publicKey),
         privateKey: JSON.stringify(privateKey),
       });
-
-      console.log("createdKeys", createdKeys);
 
       if (createdKeys) {
         await OnboardUserWithKYC.create({
@@ -100,6 +94,7 @@ app.post("/api/onboardUserWithKYC", async (req, res) => {
           ssn: await encryptData(publicKey, req.body.ssn),
           phone: await encryptData(publicKey, req.body.phone),
           walletAddress: req.body.walletAddress,
+          consentedOrgs: [],
         });
         res.json({ status: "ok" });
       }
@@ -113,15 +108,12 @@ app.post("/api/onboardUserWithKYC", async (req, res) => {
 app.get(
   `/api/getUserEncryptedKYCData/walletAddress/:walletAddress`,
   async (req, res) => {
-    console.log("HERE");
     try {
       const userData = await OnboardUserWithKYC.findOne({
         walletAddress: req.params.walletAddress,
       });
 
       if (userData) {
-        console.log("Found: ", userData);
-
         res.status(200).send(userData);
       }
     } catch (err) {
@@ -143,13 +135,9 @@ app.get(
         walletAddress: req.params.walletAddress,
       });
 
-      console.log("Got key obj", keyObj);
       const priv = JSON.parse(keyObj.privateKey);
-      console.log("Parsed private key from key obj", priv);
 
       if (userData && priv) {
-        console.log("Found user with priv key: ", userData, priv);
-
         const decryptedData = {
           firstname: await decryptData(priv, userData.firstname),
           lastname: await decryptData(priv, userData.lastname),
@@ -163,6 +151,7 @@ app.get(
           ssn: await decryptData(priv, userData.ssn),
           phone: await decryptData(priv, userData.phone),
           walletAddress: userData.walletAddress,
+          consentedOrgs: userData.consentedOrgs,
         };
 
         res.status(200).send(decryptedData);
@@ -174,8 +163,20 @@ app.get(
   }
 );
 
+app.get(`/api/getAllWalletUsers`, async (req, res) => {
+  try {
+    const users = await OnboardUserWithKYC.find({});
+
+    if (users) {
+      res.status(200).send(users);
+    }
+  } catch (err) {
+    console.error("Failed to get all users ", err);
+    res.json({ status: "Failed to get all users" });
+  }
+});
+
 app.post("/api/mint_kyc_nft", async (req, res) => {
-  console.log("Wallet: ", req.body.walletAddress);
   try {
     await mintKYCBadgeNFT(req.body.walletAddress);
     res.json({ status: "minted" });

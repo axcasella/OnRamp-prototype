@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { Button } from "antd";
-import { useHistory, Redirect } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Button, Form } from "antd";
+import { useHistory } from "react-router-dom";
 
 export default function RegularUserOnboard({ web3Modal, loadWeb3Modal, userSigner }) {
   const history = useHistory();
@@ -34,39 +34,34 @@ export default function RegularUserOnboard({ web3Modal, loadWeb3Modal, userSigne
   const modalButtons = [];
   if (web3Modal.cachedProvider) {
     modalButtons.push(
-      <Button
-        key="logoutbutton"
-        style={{ verticalAlign: "top", marginLeft: 8, marginTop: 4 }}
-        shape="round"
-        size="large"
-        onClick={logoutOfWeb3Modal}
-      >
-        logout
-      </Button>,
-      <Button color="primary" className="px-4" onClick={routeChange}>
-        User Dashboard
-      </Button>,
+      <Form.Item>
+        <Button onClick={logoutOfWeb3Modal}>Logout</Button>
+      </Form.Item>,
+      <Form.Item>
+        <Button type="primary" onClick={routeChange}>
+          User Dashboard
+        </Button>
+      </Form.Item>,
     );
   } else {
     modalButtons.push(
-      <Button
-        key="loginbutton"
-        style={{ verticalAlign: "top", marginLeft: 8, marginTop: 4 }}
-        shape="round"
-        size="large"
-        /* type={minimized ? "default" : "primary"}     too many people just defaulting to MM and having a bad time */
-        onClick={loadWeb3Modal}
-      >
-        connect
-      </Button>,
+      <Form.Item>
+        <Button type="primary" onClick={loadWeb3Modal}>
+          Connect
+        </Button>
+      </Form.Item>,
     );
   }
 
   return (
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <div>
-        <h1>Onboard</h1>
-        {modalButtons}
+        <Form labelCol={{ span: 4 }} wrapperCol={{ span: 14 }} layout="horizontal">
+          <Form.Item>
+            <h2>Onboard</h2>
+          </Form.Item>
+          {modalButtons}
+        </Form>
       </div>
     </div>
   );

@@ -31,9 +31,9 @@ export default function EnterpriseDashboard() {
     });
 
     const data = await response.json();
+    console.log("received users", data);
 
-    if (response.status === 200 && data) {
-      console.log("all users", data);
+    if (response.status === 200 && data.length > 0) {
       setTableDataSrc(
         [data].map(row => ({
           walletAddress: row[0].walletAddress,
@@ -42,7 +42,7 @@ export default function EnterpriseDashboard() {
       );
       setLoading(false);
     } else {
-      alert("Failed to get all wallet users");
+      console.log("Failed to get all wallet users");
     }
   };
 
@@ -87,7 +87,7 @@ export default function EnterpriseDashboard() {
         <h1>All users</h1>
         <div>
           {loading ? (
-            "Loading all users"
+            "No users found"
           ) : (
             <div>
               <Table columns={columns} dataSource={tableDataSrc} />

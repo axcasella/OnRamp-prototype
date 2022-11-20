@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button, Form, Input, InputNumber } from "antd";
 
 export default function EnterpriseUserLogin() {
   const [email, setEmail] = useState("");
@@ -32,14 +33,22 @@ export default function EnterpriseUserLogin() {
 
   return (
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-      <div>
-        <h1>Enterprise User Login</h1>
-        <form onSubmit={loginEnterpriseUser}>
-          <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-          <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-          <input type="submit" value="Login" />
-        </form>
-      </div>
+      <Form labelCol={{ span: 4 }} wrapperCol={{ span: 14 }} layout="horizontal">
+        <Form.Item>
+          <h2>Partner login</h2>
+        </Form.Item>
+        <Form.Item label="Email">
+          <Input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Password">
+          <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" onClick={loginEnterpriseUser}>
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 }

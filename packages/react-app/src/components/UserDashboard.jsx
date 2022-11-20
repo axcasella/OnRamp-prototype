@@ -210,7 +210,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
               My Badges
             </Link>
           </Menu.Item>
-          <Menu.Item key="/userDashboard/transfers">
+          {/* <Menu.Item key="/userDashboard/transfers">
             <Link
               onClick={() => {
                 setRoute("/userDashboard/transfers");
@@ -239,10 +239,13 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
             >
               Debug Contracts
             </Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </Menu>
         
         <Switch>
+          <Route path="/userDashboard">
+            <PersonalDataForm />
+          </Route>
           <Route path="/userDashboard/personalDataForm">
             <PersonalDataForm />
           </Route>

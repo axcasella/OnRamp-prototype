@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Select from "react-select";
+import { Button, Form, Input } from "antd";
 
 export default function PersonalDataForm() {
   const walletAddress = localStorage.getItem("walletAddress");
@@ -61,17 +61,66 @@ export default function PersonalDataForm() {
 
     const data = await response.json();
     if (data.status === "ok") {
-        console.log("ok");
+      console.log("onboard ok");
+      await mintNFTBadge(walletAddress);
+      console.log("mint ok");
     } else {
-        alert("User onboarding failed");
+      alert("User onboarding failed");
     }
-
-    // await mintNFTBadge(walletAddress);
   };
 
   return (
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-      <div>
+      <Form labelCol={{ span: 4 }} wrapperCol={{ span: 14 }} layout="horizontal">
+        <Form.Item label="Wallet Address: ">
+          <h4 style={{ marginLeft: 10, marginBottom: 0, color: "skyblue" }}>{walletAddress}</h4>
+        </Form.Item>
+        <Form.Item label="First Name">
+          <Input type="text" placeholder="First name" value={firstname} onChange={e => setFirstName(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Last Name">
+          <Input type="text" placeholder="Last name" value={lastname} onChange={e => setLastName(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Email">
+          <Input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Phone Number">
+          <Input type="tel" placeholder="Format: 123-456-7890" value={phone} onChange={e => setPhone(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Birthdate">
+          <Input type="date" value={birthdate} onChange={e => setBirthDate(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="SSN">
+          <Input type="text" placeholder="SSN" value={ssn} onChange={e => setSSN(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Address">
+          <Input type="text" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="City">
+          <Input type="text" placeholder="City" value={city} onChange={e => setCity(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="State">
+          <Input type="text" placeholder="State" value={state} onChange={e => setState(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Country">
+          <Input type="text" placeholder="Country" value={country} onChange={e => setCountry(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Zip Code">
+          <Input
+            type="text"
+            placeholder="Zip code"
+            value={zip}
+            onChange={e => setZip(e.target.value)}
+            pattern="[0-9]*"
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" onClick={onboardUserWithKYC}>
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+      {/* <div>
         <form onSubmit={onboardUserWithKYC}>
             <p>Wallet Address: {walletAddress}</p>
           <input type="text" placeholder="First name" value={firstname} onChange={e => setFirstName(e.target.value)} />
@@ -99,7 +148,7 @@ export default function PersonalDataForm() {
 
           <input type="submit" value="Register" />
         </form>
-      </div>
+      </div> */}
     </div>
   );
 }

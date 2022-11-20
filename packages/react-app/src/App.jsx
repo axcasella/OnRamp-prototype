@@ -185,7 +185,7 @@ function App() {
               }}
               to="/EnterpriseUserRegister"
             >
-              Enterprise User Registration
+              Partner User Registration
             </Link>
           </Menu.Item>
 
@@ -196,7 +196,7 @@ function App() {
               }}
               to="/EnterpriseUserLogin"
             >
-              Enterprise User Login
+              Partner User Login
             </Link>
           </Menu.Item>
 
@@ -211,6 +211,7 @@ function App() {
             </Link>
           </Menu.Item>
         </Menu>
+
         <Switch>
           <Route exact path="/" component={EnterpriseUserLogin} />
           <Route exact path="/EnterpriseUserLogin" component={EnterpriseUserLogin} />

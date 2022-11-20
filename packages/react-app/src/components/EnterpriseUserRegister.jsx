@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
+import { Button, Form, Input, InputNumber } from "antd";
 
 export default function EnterpriseUserRegister() {
   const history = useHistory();
@@ -40,7 +41,7 @@ export default function EnterpriseUserRegister() {
 
     const data = await response.json();
     if (data.status === "ok") {
-        history.push("/login");
+        history.push("/EnterpriseUserLogin");
     } else {
         alert("Registration failed");
     }
@@ -48,17 +49,31 @@ export default function EnterpriseUserRegister() {
 
   return (
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-      <div>
-        <h1>Enterprise User Register</h1>
-        <form onSubmit={registerUser}>
-          <input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} />
-          <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-          <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-          <input type="text" placeholder="Your company" value={org} onChange={e => setOrg(e.target.value)} />
+      <Form labelCol={{ span: 4 }} wrapperCol={{ span: 14 }} layout="horizontal" onSubmit={registerUser}>
+        <Form.Item>
+          <h2>Partner sign up</h2>
+        </Form.Item>
+        <Form.Item label="Name">
+          <Input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Email">
+          <Input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Password">
+          <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Organization">
+          <Input type="text" placeholder="Your company" value={org} onChange={e => setOrg(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Your role">
           <Select options={options} onChange={e => handleRoleChange(e)} />
-          <input type="submit" value="Register" />
-        </form>
-      </div>
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" onClick={registerUser}>
+            Register
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 }

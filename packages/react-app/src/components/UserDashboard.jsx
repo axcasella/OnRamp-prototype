@@ -177,7 +177,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
   }, [location.pathname]);
 
   return (
-    <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+    <div style={{ width: 1400, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <BrowserRouter>
         <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
           <Menu.Item key="/userDashboard/personalDataForm">

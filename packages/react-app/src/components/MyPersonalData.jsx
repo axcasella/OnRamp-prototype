@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button } from "antd";
+import { ColumnsType } from 'antd/es/table';
 
 const { Column } = Table;
 
@@ -89,26 +90,92 @@ export default function MyPersonalData() {
     }
   };
 
+  const columns = [
+    {
+      title: 'Wallet Address',
+      dataIndex: 'walletAddress',
+      key: 'walletAddress',
+      width: 250,
+    },
+    {
+      title: 'First Name',
+      dataIndex: 'firstname',
+      key: 'firstname',
+      ellipsis: true,
+      width: 100,
+    },
+    {
+      title: 'Last Name',
+      dataIndex: 'lastname',
+      key: 'lastname',
+      ellipsis: true,
+      width: 100,
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+      key: 'address',
+      ellipsis: true,
+      width: 120,
+    },
+    {
+      title: 'Birthdate',
+      dataIndex: 'birthdate',
+      key: 'birthdate',
+      ellipsis: true,
+      width: 120,
+    },
+    {
+      title: 'Phone',
+      dataIndex: 'phone',
+      key: 'phone',
+      ellipsis: true,
+      width: 100,
+    },
+    {
+      title: 'City',
+      dataIndex: 'city',
+      key: 'city',
+      ellipsis: true,
+      width: 100,
+    },
+    {
+      title: 'State',
+      dataIndex: 'state',
+      key: 'state',
+      ellipsis: true,
+      width: 80,
+    },
+    {
+      title: 'Country',
+      dataIndex: 'country',
+      key: 'country',
+      ellipsis: true,
+      width: 100,
+    },
+    {
+      title: 'Zip',
+      dataIndex: 'zip',
+      key: 'zip',
+      ellipsis: true,
+      width: 100,
+    },
+    {
+      title: 'SSN',
+      dataIndex: 'ssn',
+      key: 'ssn',
+      ellipsis: true,
+      width: 150,
+    },
+  ];
+
   return (
     <div>
       {loading ? (
         "Loading KYC data"
       ) : (
         <div>
-            <Table dataSource={tableDataSrc}>
-            <Column title="Wallet Address" dataIndex="walletAddress" key="walletAddress" width="10%" />
-            <Column title="First Name" dataIndex="firstname" key="firstname" width="10%" />
-            <Column title="Last Name" dataIndex="lastname" key="lastname" width="10%" />
-            <Column title="Address" dataIndex="address" key="address" width="10%" />
-            <Column title="Birthdate" dataIndex="birthdate" key="birthdate" width="10%" />
-            <Column title="Phone" dataIndex="phone" key="phone" width="10%" />
-            <Column title="City" dataIndex="city" key="city" width="10%" />
-            <Column title="State" dataIndex="state" key="state" width="10%" />
-            <Column title="Country" dataIndex="country" key="country" width="5%" />
-            <Column title="Zip" dataIndex="zip" key="zip" width="5%" />
-            <Column title="SSN" dataIndex="ssn" key="ssn" width="10%" />
-            </Table>
-
+            <Table columns={columns} dataSource={tableDataSrc} />
             {showDecryptButton ? (
                 <Button onClick={getMyPersonalDecryptedData}> Decrypt my data </Button>
             ) : (

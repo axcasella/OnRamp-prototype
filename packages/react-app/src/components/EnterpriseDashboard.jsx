@@ -6,20 +6,22 @@ import jwt from "jsonwebtoken";
 export default function EnterpriseDashboard() {
   const history = useHistory();
 
+  const token = localStorage.getItem("token");
+
   const [tableDataSrc, setTableDataSrc] = useState();
   const [loading, setLoading] = useState(true);
   const [loggedInUser, setLoggedInUser] = useState();
+  const [loggedInUserOrg, setLoggedInUserOrg] = useState();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const tokenUser = jwt.decode(token);
+    setLoggedInUser(tokenUser);
+    setLoggedInUserOrg(tokenUser.org);
+  }, [token]);
 
-    if (token) {
-        const tokenUser = jwt.decode(token);
-        setLoggedInUser(tokenUser);
-    } else {
-        history.replace("/EnterpriseUserLogin");
-    }
-  }, []);
+  const viewData = walletAddress => {
+    history.push(`/EnterpriseViewKYCData/${walletAddress}`);
+  };
 
   const getAllWalletUsers = async () => {
     const response = await fetch(`http://localhost:8000/api/getAllWalletUsers`, {
@@ -31,13 +33,18 @@ export default function EnterpriseDashboard() {
     });
 
     const data = await response.json();
-    console.log("received users", data);
 
     if (response.status === 200 && data.length > 0) {
       setTableDataSrc(
         [data].map(row => ({
           walletAddress: row[0].walletAddress,
-          displayText: row[0].consentedOrgs.includes(loggedInUser.org) ? "View data" : "Request permission",
+          displayText: row[0].consentedOrgs.includes(loggedInUserOrg) ? (
+            <Button type="primary" onClick={viewData(row[0].walletAddress)}>
+              View data
+            </Button>
+          ) : (
+            <Button onClick={() => console.log("request")}>Request permission</Button>
+          ),
         })),
       );
       setLoading(false);
@@ -48,7 +55,7 @@ export default function EnterpriseDashboard() {
 
   useEffect(() => {
     getAllWalletUsers();
-  }, []);
+  }, [loggedInUserOrg]);
 
   const columns = [
     {

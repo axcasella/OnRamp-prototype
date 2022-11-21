@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useHistory } from "react-router-dom";
 import { Table, Button } from "antd";
 
 export default function EnterpriseViewKYCData() {
-  const walletAddress = "0x48897923360656e77882bA5783E36530548A9F6F";
+  const params = useParams();
+  const walletAddress = params.walletAddress;
+
+  const history = useHistory();
 
   const [tableDataSrc, setTableDataSrc] = useState();
   const [loading, setLoading] = useState(true);
@@ -38,7 +42,6 @@ export default function EnterpriseViewKYCData() {
         })),
       );
       setLoading(false);
-      console.log("tableDataSrc", tableDataSrc);
     } else {
       alert("Failed to get encrypted KYC data");
     }
@@ -79,7 +82,6 @@ export default function EnterpriseViewKYCData() {
       );
       setLoading(false);
       setShowDecryptButton(false);
-      console.log("tableDataSrc", tableDataSrc);
     } else {
       alert("Failed to get decrypted KYC data");
     }
@@ -165,17 +167,20 @@ export default function EnterpriseViewKYCData() {
   ];
 
   return (
-    <div>
+    <div style={{ width: 1400, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       {loading ? (
         "Loading User's KYC data"
       ) : (
         <div>
           <Table columns={columns} dataSource={tableDataSrc} />
           {showDecryptButton ? (
-            <Button onClick={getMyPersonalDecryptedData}> Decrypt my data </Button>
+            <Button onClick={getMyPersonalDecryptedData}> Decrypt user data </Button>
           ) : (
-            <p>Your dapp has access to this user's data</p>
+            <h4>Your dapp has access to this user's encrypted data</h4>
           )}
+          <Button style={{ marginLeft: 10 }} type="primary" onClick={() => history.goBack()}>
+            Back
+          </Button>
         </div>
       )}
     </div>

@@ -243,16 +243,16 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
         </Menu>
         
         <Switch>
-          <Route path="/userDashboard">
+          <Route exact path={["/userDashboard", "/userDashboard/personalDataForm"]}>
             <PersonalDataForm />
           </Route>
-          <Route path="/userDashboard/personalDataForm">
+          {/* <Route path="/userDashboard/personalDataForm">
             <PersonalDataForm />
-          </Route>
-          <Route path="/userDashboard/MyPersonalData">
+          </Route> */}
+          <Route exact path="/userDashboard/MyPersonalData">
             <MyPersonalData />
           </Route>
-          <Route path="/userDashboard/nft_badges">
+          <Route exact path="/userDashboard/nft_badges">
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <List
                 bordered
@@ -307,7 +307,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
             </div>
           </Route>
 
-          <Route path="/userDashboard/transfers">
+          <Route exact path="/userDashboard/transfers">
             <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <List
                 bordered
@@ -325,7 +325,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
             </div>
           </Route>
 
-          <Route path="/userDashboard/ipfsdown">
+          <Route exact path="/userDashboard/ipfsdown">
             <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
               <Input
                 value={ipfsDownHash}
@@ -362,7 +362,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
                 <Contract/> component will automatically parse your ABI and give you a form to interact with it locally
             */}
 
-          <Route path="/userDashboard/debugcontracts">
+          <Route exact path="/userDashboard/debugcontracts">
             <Contract
               name="YourCollectible"
               signer={userSigner}

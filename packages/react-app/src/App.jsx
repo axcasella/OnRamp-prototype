@@ -229,7 +229,7 @@ function App() {
             render={() => <UserDashboard web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} userSigner={userSigner} />}
           />
           <Route exact path="/EnterpriseDashboard" render={() => <EnterpriseDashboard />} />
-          <Route exact path="/enterpriseUserDashboard" render={() => <EnterpriseViewKYCData />} />
+          <Route exact path="/EnterpriseViewKYCData/:walletAddress" render={() => <EnterpriseViewKYCData />} />
         </Switch>
       </BrowserRouter>
     </div>

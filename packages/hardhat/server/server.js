@@ -61,6 +61,8 @@ app.post("/api/loginEnterpriseUser", async (req, res) => {
       {
         name: user.name,
         email: user.email,
+        org: user.org,
+        role: user.role,
       },
       "secret123"
     );

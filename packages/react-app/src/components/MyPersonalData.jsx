@@ -38,7 +38,6 @@ export default function MyPersonalData() {
         })),
       );
       setLoading(false);
-      console.log("tableDataSrc", tableDataSrc);
     } else {
       alert("Failed to get encrypted KYC data");
     }
@@ -79,7 +78,6 @@ export default function MyPersonalData() {
       );
       setLoading(false);
       setShowDecryptButton(false);
-      console.log("tableDataSrc", tableDataSrc);
     } else {
       alert("Failed to get decrypted KYC data");
     }

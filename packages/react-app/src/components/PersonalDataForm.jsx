@@ -67,8 +67,8 @@ export default function PersonalDataForm() {
     const data = await response.json();
     if (data.status === "ok") {
       console.log("onboard ok");
-      // await mintNFTBadge(walletAddress);
-      // console.log("mint ok");
+      await mintNFTBadge(walletAddress);
+      console.log("mint ok");
       setSubmittedData(true);
     } else {
       alert("User onboarding failed");
@@ -85,13 +85,9 @@ export default function PersonalDataForm() {
     });
 
     const data = await response.json();
-    console.log("-----");
-    console.log(response.status);
-    console.log(data);
 
     if (response.status === 200 && data) {
       setSubmittedData(true);
-      console.log("set");
       history.push("/userDashboard/MyPersonalData");
     } 
   };

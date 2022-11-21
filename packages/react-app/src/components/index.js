@@ -25,3 +25,4 @@ export { default as PersonalDataForm } from "./PersonalDataForm";
 export { default as MyPersonalData } from "./MyPersonalData";
 export { default as EnterpriseViewKYCData } from "./EnterpriseViewKYCData";
 export { default as EnterpriseDashboard } from "./EnterpriseDashboard";
+export { default as RegularUserConsentRequests } from "./RegularUserConsentRequests";

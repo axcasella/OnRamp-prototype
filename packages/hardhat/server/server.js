@@ -198,8 +198,6 @@ app.post("/api/addConsent", async (req, res) => {
     const walletAdress = req.body.walletAddress;
     const org = req.body.org;
 
-    console.log("addConsent got", walletAdress, org);
-
     await UserConsent.create({
       walletAddress: walletAdress,
       org,
@@ -210,8 +208,6 @@ app.post("/api/addConsent", async (req, res) => {
     const existingConsentRequests = await ConsentRequests.findOne({
       walletAdress,
     });
-
-    console.log("addConsent existingConsentRequests", existingConsentRequests);
 
     if (existingConsentRequests) {
       let tempArr = existingConsentRequests.consentRequests;
@@ -227,6 +223,16 @@ app.post("/api/addConsent", async (req, res) => {
       });
     }
 
+    // add to list of consentedOrgs in user object
+    let user = await OnboardUserWithKYC.findOne({
+      walletAdress,
+    });
+
+    let tmpArr = user.consentedOrgs;
+    tmpArr.push(org);
+    user.consentedOrgs = tmpArr;
+    await OnboardUserWithKYC.findOneAndUpdate(user);
+
     res.json({ status: "ok" });
   } catch (err) {
     console.error("Add consent error ", err);
@@ -234,7 +240,7 @@ app.post("/api/addConsent", async (req, res) => {
   }
 });
 
-app.post("/api/requestConsent", async (req, res) => {
+app.post("/api/requestConsent/", async (req, res) => {
   try {
     const org = req.body.org;
     const walletAddress = req.body.walletAddress;
@@ -249,8 +255,8 @@ app.post("/api/requestConsent", async (req, res) => {
       }
 
       let tempArr = existingConsentRequests.consentRequests;
-      tempArr = tempArr.push(org);
-      await ConsentRequests.findOneAndUpdate({
+      tempArr.push(org);
+      await ConsentRequests.updateOne({
         walletAddress,
         consentRequests: tempArr,
       });
@@ -267,6 +273,29 @@ app.post("/api/requestConsent", async (req, res) => {
     res.json({ status: "Add consent failed" });
   }
 });
+
+app.get(
+  "/api/getConsentRequests/walletAddress/:walletAddress",
+  async (req, res) => {
+    try {
+      const walletAddress = req.params.walletAddress;
+
+      const consentRequests = await ConsentRequests.findOne({
+        walletAddress,
+      });
+
+      let result = [];
+      if (consentRequests) {
+        result = consentRequests.consentRequests;
+      }
+
+      res.json({ status: "ok", consentRequests: result });
+    } catch (err) {
+      console.error("Get consent requests error ", err);
+      res.json({ status: "Failed to get consent requests" });
+    }
+  }
+);
 
 app.listen(8000, () => {
   console.log("Node server started on port 8000");

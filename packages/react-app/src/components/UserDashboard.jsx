@@ -3,7 +3,7 @@ import { Button, Card, Input, List, Menu } from "antd";
 import { BrowserRouter, Link, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import jwt from "jsonwebtoken";
 import { useContractLoader, useContractReader, useEventListener, useGasPrice, useUserSigner, useExchangePrice } from "../hooks";
-import { Address, AddressInput, Contract, Account, PersonalDataForm, MyPersonalData } from ".";
+import { Address, AddressInput, Contract, Account, PersonalDataForm, MyPersonalData, RegularUserConsentRequests} from ".";
 import { INFURA_ID, INFURA_SECRET, NETWORKS } from "../constants";
 import { Transactor } from "../helpers";
 
@@ -210,6 +210,16 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
               My Badges
             </Link>
           </Menu.Item>
+          <Menu.Item key="/userDashboard/RegularUserConsentRequests">
+            <Link
+              onClick={() => {
+                setRoute("/userDashboard/RegularUserConsentRequests");
+              }}
+              to="/userDashboard/RegularUserConsentRequests"
+            >
+              My Consent Requests
+            </Link>
+          </Menu.Item>
           {/* <Menu.Item key="/userDashboard/transfers">
             <Link
               onClick={() => {
@@ -251,6 +261,9 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
           </Route> */}
           <Route exact path="/userDashboard/MyPersonalData">
             <MyPersonalData />
+          </Route>
+          <Route exact path="/userDashboard/RegularUserConsentRequests">
+            <RegularUserConsentRequests />
           </Route>
           <Route exact path="/userDashboard/nft_badges">
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>

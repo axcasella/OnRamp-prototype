@@ -9,6 +9,8 @@ const mongoose = require("mongoose");
 const EnterpriseUserRegistration = require("./models/enterpriseUser.models");
 const OnboardUserWithKYC = require("./models/onboardUserWithKYC.models");
 const UserKeys = require("./models/userKeys.models");
+const UserConsent = require("./models/userConsent.models");
+const ConsentRequests = require("./models/consentRequest.models");
 
 app.use(cors());
 app.use(express.json());
@@ -31,6 +33,8 @@ const {
   encryptData,
   decryptData,
 } = require("./helper/encryption.js");
+
+const { arrayRemove } = require("./helper/utils.js");
 
 const { mintKYCBadgeNFT } = require("../mint/mint_nft.js");
 
@@ -186,6 +190,80 @@ app.post("/api/mint_kyc_nft", async (req, res) => {
   } catch (err) {
     console.error("Mint NFT error ", err);
     res.json({ status: "Mint NFT failed" });
+  }
+});
+
+app.post("/api/addConsent", async (req, res) => {
+  try {
+    const walletAdress = req.body.walletAddress;
+    const org = req.body.org;
+
+    await UserConsent.create({
+      walletAddress: walletAdress,
+      org,
+      consent: "full",
+    });
+
+    // remove from list of existing consent requests
+    const existingConsentRequests = await ConsentRequests.findOne({
+      walletAdress,
+    });
+
+    console.log("addConsent existingConsentRequests", existingConsentRequests);
+
+    if (existingConsentRequests) {
+      let tempArr = existingConsentRequests.consentRequests;
+      tempArr = arrayRemove(tempArr, org);
+      await ConsentRequests.findOneAndUpdate({
+        walletAdress,
+        consentRequests: tempArr,
+      });
+    } else {
+      await ConsentRequests.create({
+        walletAdress,
+        consentRequests: [org],
+      });
+    }
+
+    res.json({ status: "ok" });
+  } catch (err) {
+    console.error("Add consent error ", err);
+    res.json({ status: "Add consent failed" });
+  }
+});
+
+app.post("/api/requestConsent", async (req, res) => {
+  try {
+    const org = req.body.org;
+    const walletAddress = req.body.walletAddress;
+
+    const existingConsentRequests = await ConsentRequests.findOne({
+      walletAddress,
+    });
+
+    console.log(
+      "requestConsent existingConsentRequests",
+      existingConsentRequests
+    );
+
+    if (existingConsentRequests) {
+      let tempArr = existingConsentRequests.consentRequests;
+      tempArr = tempArr.push(org);
+      await ConsentRequests.findOneAndUpdate({
+        walletAddress,
+        consentRequests: tempArr,
+      });
+    } else {
+      await ConsentRequests.create({
+        walletAddress,
+        consentRequests: [org],
+      });
+    }
+
+    res.json({ status: "ok" });
+  } catch (err) {
+    console.error("Add consent error ", err);
+    res.json({ status: "Add consent failed" });
   }
 });
 

@@ -198,6 +198,8 @@ app.post("/api/addConsent", async (req, res) => {
     const walletAdress = req.body.walletAddress;
     const org = req.body.org;
 
+    console.log("addConsent got", walletAdress, org);
+
     await UserConsent.create({
       walletAddress: walletAdress,
       org,
@@ -241,12 +243,11 @@ app.post("/api/requestConsent", async (req, res) => {
       walletAddress,
     });
 
-    console.log(
-      "requestConsent existingConsentRequests",
-      existingConsentRequests
-    );
-
     if (existingConsentRequests) {
+      if (existingConsentRequests.consentRequests.includes(org)) {
+        return res.json({ status: "already exists" });
+      }
+
       let tempArr = existingConsentRequests.consentRequests;
       tempArr = tempArr.push(org);
       await ConsentRequests.findOneAndUpdate({

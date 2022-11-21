@@ -23,6 +23,29 @@ export default function EnterpriseDashboard() {
     history.push(`/EnterpriseViewKYCData/${walletAddress}`);
   };
 
+  const requestConsent = async (walletAddress, org) => {
+    const response = await fetch("http://localhost:8000/api/requestConsent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        walletAddress,
+        org,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.status === "ok") {
+      console.log("request consent success");
+    } else if (data.status === "already exists") {
+      alert(org + " already requested consent");
+    } else {
+      alert("request consent failed");
+    }
+  }
+
   const getAllWalletUsers = async () => {
     const response = await fetch(`http://localhost:8000/api/getAllWalletUsers`, {
       method: "GET",
@@ -38,12 +61,12 @@ export default function EnterpriseDashboard() {
       setTableDataSrc(
         [data].map(row => ({
           walletAddress: row[0].walletAddress,
+          org: loggedInUserOrg,
+          consentedOrgs: row[0].consentedOrgs,
           displayText: row[0].consentedOrgs.includes(loggedInUserOrg) ? (
-            <Button type="primary" onClick={viewData(row[0].walletAddress)}>
-              View data
-            </Button>
+            <Button type="primary">View data</Button>
           ) : (
-            <Button onClick={() => console.log("request")}>Request permission</Button>
+            <Button>Request permission</Button>
           ),
         })),
       );
@@ -64,28 +87,29 @@ export default function EnterpriseDashboard() {
       key: "walletAddress",
       width: 500,
     },
-    {
-        title: "Available Action",
-        dataIndex: "displayText",
-        key: "displayText",
-        width: 100,
-    },
     // {
-    //   title: "Available Action",
-    //   dataIndex: "availableAction",
-    //   key: "availableAction",
-    //   width: 100,
-    //   render: (text, record) => {
-    //     return `${text}`;
-    //   },
-    //   onCell: (record, rowIndex) => {
-    //     return {
-    //       onClick: () => {
-    //         console.log("Clicked: ", record, rowIndex);
-    //       },
-    //     };
-    //   },
+    //     title: "Available Action",
+    //     dataIndex: "displayText",
+    //     key: "displayText",
+    //     width: 100,
     // },
+    {
+      title: "Available Action",
+      dataIndex: "displayText",
+      key: "displayText",
+      width: 100,
+      onCell: (record, rowIndex) => {
+        return {
+          onClick: () => {
+            if (record.consentedOrgs.includes(record.org)) {
+              viewData(record.walletAddress);
+            } else {
+              requestConsent(record.walletAddress, record.org)
+            }
+          },
+        };
+      },
+    },
   ];
 
   return (

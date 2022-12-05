@@ -146,6 +146,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
             const jsonManifest = JSON.parse(jsonManifestBuffer.toString());
             console.log("jsonManifest", jsonManifest);
             collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: address, ...jsonManifest });
+            console.log("--tokenURI: ", tokenURI);
           } catch (e) {
             console.log(e);
           }

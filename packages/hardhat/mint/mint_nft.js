@@ -36,12 +36,24 @@ const mintKYCBadgeNFT = async (address) => {
     name: "KYC Verified Badge",
     attributes: [
       {
-        trait_type: "dmv",
-        value: "compliant",
+        type: "AML",
+        value: "8",
       },
       {
-        trait_type: "gov",
-        value: "compliant",
+        type: "DID",
+        value: address,
+      },
+      {
+        type: "CRED_PROTOCOL_SCORE",
+        value: "700",
+      },
+      {
+        type: "IS_BUSINESS",
+        value: "true",
+      },
+      {
+        type: "COUNTRY",
+        value: "US",
       },
     ],
   };

@@ -185,8 +185,15 @@ app.get(`/api/getAllWalletUsers`, async (req, res) => {
 
 app.post("/api/mint_kyc_nft", async (req, res) => {
   try {
-    await mintKYCBadgeNFT(req.body.walletAddress);
-    res.json({ status: "minted" });
+    const result = await mintKYCBadgeNFT(
+      req.body.walletAddress,
+      req.body.country
+    );
+    if (result.status === true) {
+      res.json({ status: "minted" });
+    } else {
+      res.json({ status: result.msg });
+    }
   } catch (err) {
     console.error("Mint NFT error ", err);
     res.json({ status: "Mint NFT failed" });

@@ -18,9 +18,34 @@ const ipfs = ipfsAPI({
   },
 });
 
+const OFACCountryList = [
+  "Belarus",
+  "Cuba",
+  "DR Congo",
+  "Iran",
+  "Iraq",
+  "Ivory Coast",
+  "Liberia",
+  "Myanmar",
+  "North Korea",
+  "Sudan",
+  "Syria",
+  "Zimbabwe",
+  "Russia", // Russia is not in this list originally
+];
+
+const isBannedCountry = async (country) => {
+  return OFACCountryList.includes(country);
+};
+
 // @param address - address to mint to
 // @param metadata - data that will be on IPFS
-const mintKYCBadgeNFT = async (address) => {
+const mintKYCBadgeNFT = async (address, country) => {
+  // validate country first
+  if (isBannedCountry(country)) {
+    return { status: false, msg: "Country is banned from doing business" };
+  }
+
   console.log("\n\n 🎫 Minting to " + address + "...\n");
 
   const { deployer } = await getNamedAccounts();
@@ -49,23 +74,36 @@ const mintKYCBadgeNFT = async (address) => {
       },
       {
         type: "IS_BUSINESS",
-        value: "true",
+        value: "false",
       },
       {
         type: "COUNTRY",
-        value: "US",
+        value: country,
       },
     ],
   };
-  console.log("Uploading kycApprovedBadge for address", address);
-  const uploaded = await ipfs.add(JSON.stringify(kycApprovedBadge));
 
-  console.log(
-    "Minting kycApprovedBadge with IPFS hash (" + uploaded.path + ")"
-  );
-  await yourCollectible.mintItem(address, uploaded.path, {
-    gasLimit: 10000000,
-  });
+  let uploaded = {};
+  try {
+    console.log("Uploading kycApprovedBadge for address", address);
+    uploaded = await ipfs.add(JSON.stringify(kycApprovedBadge));
+  } catch (err) {
+    return { status: false, msg: "Failed to upload to IPFS: " + err };
+  }
+
+  try {
+    console.log(
+      "Minting kycApprovedBadge with IPFS hash (" + uploaded.path + ")"
+    );
+    await yourCollectible.mintItem(address, uploaded.path, {
+      gasLimit: 10000000,
+    });
+  } catch (err) {
+    return { status: false, msg: "Failed to mint to blockchain: " + err };
+  }
+
+  // minted
+  return { status: true, msg: "Successfully minted" };
 
   // console.log("Transferring Ownership of YourCollectible to "+address+"...")
   // await yourCollectible.transferOwnership(address)

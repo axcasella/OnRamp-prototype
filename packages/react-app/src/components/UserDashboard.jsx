@@ -136,6 +136,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
       const collectibleUpdate = [];
       for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
         try {
+          console.log("iteration", tokenIndex);
           const tokenId = await readContracts.YourCollectible.tokenOfOwnerByIndex(address, tokenIndex);
           const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
           const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");

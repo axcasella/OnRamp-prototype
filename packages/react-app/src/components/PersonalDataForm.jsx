@@ -29,6 +29,7 @@ export default function PersonalDataForm() {
       },
       body: JSON.stringify({
         walletAddress,
+        country,
       }),
     });
 
@@ -36,7 +37,7 @@ export default function PersonalDataForm() {
     if (data.status === "minted") {
         console.log("Minted badge");
     } else {
-        alert("Failed to mint badge failed");
+        alert("Failed to mint badge");
     }
   };
 
@@ -67,11 +68,17 @@ export default function PersonalDataForm() {
     const data = await response.json();
     if (data.status === "ok") {
       console.log("onboard ok");
-      await mintNFTBadge(walletAddress);
-      console.log("mint ok");
-      setSubmittedData(true);
+      try {
+        await mintNFTBadge();
+        console.log("mint ok");
+
+        setSubmittedData(true);
+      } catch (err) {
+        console.log("mint failed", err);
+      }
     } else {
       alert("User onboarding failed");
+      console.log("User onboarding failed", data);
     }
   };
 

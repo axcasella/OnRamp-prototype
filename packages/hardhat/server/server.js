@@ -189,11 +189,13 @@ app.post("/api/mint_kyc_nft", async (req, res) => {
       req.body.walletAddress,
       req.body.country
     );
+    console.log("mint api result: ", result);
+
     if (result.status === true) {
-      res.json({ status: "minted" });
-    } else {
-      res.json({ status: result.msg });
+      return res.json({ status: "minted" });
     }
+
+    res.json({ status: result.msg });
   } catch (err) {
     console.error("Mint NFT error ", err);
     res.json({ status: "Mint NFT failed" });

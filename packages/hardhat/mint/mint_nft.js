@@ -34,7 +34,7 @@ const OFACCountryList = [
   "Russia", // Russia is not in this list originally
 ];
 
-const isBannedCountry = async (country) => {
+const isBannedCountry = (country) => {
   return OFACCountryList.includes(country);
 };
 
@@ -91,13 +91,16 @@ const mintKYCBadgeNFT = async (address, country) => {
     return { status: false, msg: "Failed to upload to IPFS: " + err };
   }
 
+  console.log("uploaded", uploaded);
+
   try {
     console.log(
       "Minting kycApprovedBadge with IPFS hash (" + uploaded.path + ")"
     );
-    await yourCollectible.mintItem(address, uploaded.path, {
+    let tokenID = await yourCollectible.mintItem(address, uploaded.path, {
       gasLimit: 10000000,
     });
+    console.log("tokenID", tokenID);
   } catch (err) {
     return { status: false, msg: "Failed to mint to blockchain: " + err };
   }

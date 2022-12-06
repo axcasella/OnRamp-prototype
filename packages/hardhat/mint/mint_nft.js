@@ -41,9 +41,13 @@ const isBannedCountry = (country) => {
 // @param address - address to mint to
 // @param metadata - data that will be on IPFS
 const mintKYCBadgeNFT = async (address, country) => {
+  let badgeImgURL =
+    "https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg";
   // validate country first
   if (isBannedCountry(country)) {
-    return { status: false, msg: "Country is banned from doing business" };
+    badgeImgURL =
+      "https://en.wikipedia.org/wiki/No_symbol#/media/File:ProhibitionSign2.svg";
+    console.log("country is banned from doing business");
   }
 
   console.log("\n\n 🎫 Minting to " + address + "...\n");
@@ -56,8 +60,7 @@ const mintKYCBadgeNFT = async (address, country) => {
   const kycApprovedBadge = {
     description: "KYC verified badge",
     external_url: "",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg",
+    image: badgeImgURL,
     name: "KYC Verified Badge",
     attributes: [
       {
@@ -91,16 +94,14 @@ const mintKYCBadgeNFT = async (address, country) => {
     return { status: false, msg: "Failed to upload to IPFS: " + err };
   }
 
-  console.log("uploaded", uploaded);
-
   try {
     console.log(
       "Minting kycApprovedBadge with IPFS hash (" + uploaded.path + ")"
     );
-    let tokenID = await yourCollectible.mintItem(address, uploaded.path, {
+    const result = await yourCollectible.mintItem(address, uploaded.path, {
       gasLimit: 10000000,
     });
-    console.log("tokenID", tokenID);
+    console.log("Minted ", result);
   } catch (err) {
     return { status: false, msg: "Failed to mint to blockchain: " + err };
   }

@@ -3,7 +3,7 @@ import { Button, Card, Input, List, Menu } from "antd";
 import { BrowserRouter, Link, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import jwt from "jsonwebtoken";
 import { useContractLoader, useContractReader, useEventListener, useGasPrice, useUserSigner, useExchangePrice } from "../hooks";
-import { Address, AddressInput, Contract, Account, PersonalDataForm, MyPersonalData, RegularUserConsentRequests} from ".";
+import { Address, AddressInput, Contract, Account, PersonalDataForm, MyPersonalData, RegularUserConsentRequests, NFTBadges} from ".";
 import { INFURA_ID, INFURA_SECRET, NETWORKS } from "../constants";
 import { Transactor } from "../helpers";
 
@@ -104,6 +104,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
 
   // Load in your local 📝 contract and read a value from it:
   const readContracts = useContractLoader(localProvider);
+  console.log("User dashboard readContracts", readContracts);
 
   const localChainId = localProvider && localProvider._network && localProvider._network.chainId;
 
@@ -132,6 +133,8 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
   const transferEvents = useEventListener(readContracts, "YourCollectible", "Transfer", localProvider, 1);
 
   useEffect(() => {
+    console.log("address: ", address);
+    console.log("yourBalance: ", yourBalance);
     const updateYourCollectibles = async () => {
       const collectibleUpdate = [];
       for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
@@ -222,26 +225,6 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
               My Consent Requests
             </Link>
           </Menu.Item>
-          {/* <Menu.Item key="/userDashboard/transfers">
-            <Link
-              onClick={() => {
-                setRoute("/userDashboard/transfers");
-              }}
-              to="/userDashboard/transfers"
-            >
-              Transfers
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/userDashboard/ipfsdown">
-            <Link
-              onClick={() => {
-                setRoute("/userDashboard/ipfsdown");
-              }}
-              to="/userDashboard/ipfsdown"
-            >
-              IPFS Download
-            </Link>
-          </Menu.Item>
           <Menu.Item key="/userDashboard/debugcontracts">
             <Link
               onClick={() => {
@@ -251,16 +234,13 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
             >
               Debug Contracts
             </Link>
-          </Menu.Item> */}
+          </Menu.Item> 
         </Menu>
         
         <Switch>
           <Route exact path={["/userDashboard", "/userDashboard/personalDataForm"]}>
             <PersonalDataForm />
           </Route>
-          {/* <Route path="/userDashboard/personalDataForm">
-            <PersonalDataForm />
-          </Route> */}
           <Route exact path="/userDashboard/MyPersonalData">
             <MyPersonalData />
           </Route>
@@ -268,109 +248,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
             <RegularUserConsentRequests />
           </Route>
           <Route exact path="/userDashboard/nft_badges">
-            <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-              <List
-                bordered
-                dataSource={yourCollectibles}
-                renderItem={item => {
-                  const id = item.id.toNumber();
-                  return (
-                    <List.Item key={id + "_" + item.uri + "_" + item.owner}>
-                      <Card
-                        title={
-                          <div>
-                            <span style={{ fontSize: 16, marginRight: 8 }}>#{id}</span> {item.name}
-                          </div>
-                        }
-                      >
-                        <div>
-                          <img src={item.image} style={{ maxWidth: 150 }} alt="NFT badge" />
-                        </div>
-                        <div>{item.description}</div>
-                      </Card>
-
-                      <div>
-                        owner:{" "}
-                        <Address
-                          address={item.owner}
-                          ensProvider={mainnetProvider}
-                          blockExplorer={blockExplorer}
-                          fontSize={16}
-                        />
-                        <AddressInput
-                          ensProvider={mainnetProvider}
-                          placeholder="transfer to address"
-                          value={transferToAddresses[id]}
-                          onChange={newValue => {
-                            const update = {};
-                            update[id] = newValue;
-                            setTransferToAddresses({ ...transferToAddresses, ...update });
-                          }}
-                        />
-                        <Button
-                          onClick={() => {
-                            tx(writeContracts.YourCollectible.transferFrom(address, transferToAddresses[id], id));
-                          }}
-                        >
-                          Transfer
-                        </Button>
-                      </div>
-                    </List.Item>
-                  );
-                }}
-              />
-            </div>
-          </Route>
-
-          <Route exact path="/userDashboard/transfers">
-            <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-              <List
-                bordered
-                dataSource={transferEvents}
-                renderItem={item => {
-                  return (
-                    <List.Item key={item[0] + "_" + item[1] + "_" + item.blockNumber + "_" + item[2].toNumber()}>
-                      <span style={{ fontSize: 16, marginRight: 8 }}>#{item[2].toNumber()}</span>
-                      <Address address={item[0]} ensProvider={mainnetProvider} fontSize={16} /> =&gt;
-                      <Address address={item[1]} ensProvider={mainnetProvider} fontSize={16} />
-                    </List.Item>
-                  );
-                }}
-              />
-            </div>
-          </Route>
-
-          <Route exact path="/userDashboard/ipfsdown">
-            <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
-              <Input
-                value={ipfsDownHash}
-                placeholder="IPFS hash (like QmadqNw8zkdrrwdtPFK1pLi8PPxmkQ4pDJXY8ozHtz6tZq)"
-                onChange={e => {
-                  setIpfsDownHash(e.target.value);
-                }}
-              />
-            </div>
-            <Button
-              style={{ margin: 8 }}
-              loading={sending}
-              size="large"
-              shape="round"
-              type="primary"
-              onClick={async () => {
-                console.log("DOWNLOADING...", ipfsDownHash);
-                setDownloading(true);
-                setIpfsContent();
-                const result = await getFromIPFS(ipfsDownHash); // addToIPFS(JSON.stringify(yourJSON))
-                if (result && result.toString) {
-                  setIpfsContent(result.toString());
-                }
-                setDownloading(false);
-              }}
-            >
-              Download from IPFS
-            </Button>
-
-            <pre style={{ padding: 16, width: 500, margin: "auto", paddingBottom: 150 }}>{ipfsContent}</pre>
+            <NFTBadges localProvider={localProvider} />
           </Route>
 
             {/*

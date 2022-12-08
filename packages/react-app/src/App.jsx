@@ -12,7 +12,7 @@ import { useExchangePrice, useUserSigner } from "./hooks";
 
 const { ethers } = require("ethers");
 
-const targetNetwork = NETWORKS.mumbai;
+const targetNetwork = NETWORKS.matic;
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;

@@ -70,7 +70,7 @@ export const NETWORKS = {
     color: "#2bbdf7",
     chainId: 137,
     price: 1,
-    gasPrice: 1000000000,
+    gasPrice: 100000000000,
     rpcUrl: "https://rpc-mainnet.maticvigil.com",
     faucet: "https://faucet.matic.network/",
     blockExplorer: "https://explorer-mainnet.maticvigil.com//",

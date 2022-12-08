@@ -11,7 +11,7 @@ const { ethers } = require("ethers");
 const { BufferList } = require("bl");
 const ipfsAPI = require("ipfs-http-client");
 
-const targetNetwork = NETWORKS.mumbai;
+const targetNetwork = NETWORKS.matic;
 const blockExplorer = targetNetwork.blockExplorer;
 
 // 🏠 Your local provider is usually pointed at your local blockchain
@@ -59,6 +59,7 @@ const mainnetInfura = navigator.onLine
 
 export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) {
   const mainnetProvider = scaffoldEthProvider && scaffoldEthProvider._network ? scaffoldEthProvider : mainnetInfura;
+  // const mainnetProvider = mainnetInfura;
 
   const history = useHistory();
   const logoutOfWeb3Modal = async () => {
@@ -98,9 +99,12 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
 
   /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
   const gasPrice = useGasPrice(targetNetwork, "fast");
+  console.log("gasPrice", gasPrice);
 
   // The transactor wraps transactions and provides notificiations
   const tx = Transactor(userSigner, gasPrice);
+
+  console.log("localProvider", localProvider);
 
   // Load in your local 📝 contract and read a value from it:
   const readContracts = useContractLoader(localProvider);
@@ -248,7 +252,59 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
             <RegularUserConsentRequests />
           </Route>
           <Route exact path="/userDashboard/nft_badges">
-            <NFTBadges localProvider={localProvider} />
+            {/* <NFTBadges localProvider={localProvider} /> */}
+            <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+              <List
+                bordered
+                dataSource={yourCollectibles}
+                renderItem={item => {
+                  const id = item.id.toNumber();
+                  return (
+                    <List.Item key={id + "_" + item.uri + "_" + item.owner}>
+                      <Card
+                        title={
+                          <div>
+                            <span style={{ fontSize: 16, marginRight: 8 }}>#{id}</span> {item.name}
+                          </div>
+                        }
+                      >
+                        <div>
+                          <img src={item.image} style={{ maxWidth: 150 }} alt="NFT badge" />
+                        </div>
+                        <div>{item.description}</div>
+                      </Card>
+
+                      <div>
+                        owner:{" "}
+                        <Address
+                          address={item.owner}
+                          ensProvider={mainnetProvider}
+                          blockExplorer={blockExplorer}
+                          fontSize={16}
+                        />
+                        <AddressInput
+                          ensProvider={mainnetProvider}
+                          placeholder="transfer to address"
+                          value={transferToAddresses[id]}
+                          onChange={newValue => {
+                            const update = {};
+                            update[id] = newValue;
+                            setTransferToAddresses({ ...transferToAddresses, ...update });
+                          }}
+                        />
+                        <Button
+                          onClick={() => {
+                            tx(writeContracts.YourCollectible.transferFrom(address, transferToAddresses[id], id));
+                          }}
+                        >
+                          Transfer
+                        </Button>
+                      </div>
+                    </List.Item>
+                  );
+                }}
+              />
+            </div>
           </Route>
 
             {/*

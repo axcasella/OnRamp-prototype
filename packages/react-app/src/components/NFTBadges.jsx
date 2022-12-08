@@ -9,8 +9,6 @@ const { ethers } = require("ethers");
 const { BufferList } = require("bl");
 const ipfsAPI = require("ipfs-http-client");
 
-const targetNetwork = NETWORKS.mumbai;
-
 const projectId = INFURA_ID;
 const projectSecret = INFURA_SECRET;
 const projectIdAndSecret = `${projectId}:${projectSecret}`;
@@ -31,61 +29,61 @@ headers: {
 // const localProvider = new ethers.providers.StaticJsonRpcProvider(localProviderUrlFromEnv);
 
 export default function NFTBadges(localProvider) {
-    console.log("localProvider", localProvider)
-    const walletAddress = localStorage.getItem("walletAddress");
+    // console.log("localProvider", localProvider)
+    // const walletAddress = localStorage.getItem("walletAddress");
 
-    const readContracts = useContractLoader(localProvider);
-    console.log("readContracts", readContracts)
+    // const readContracts = useContractLoader(localProvider);
+    // console.log("readContracts", readContracts)
 
-    const balance = useContractReader(readContracts, "YourCollectible", "balanceOf", [walletAddress]);
-    console.log("🤗 balance:", balance);
+    // const balance = useContractReader(readContracts, "YourCollectible", "balanceOf", [walletAddress]);
+    // console.log("🤗 balance:", balance);
   
-    const yourBalance = balance && balance.toNumber && balance.toNumber();
+    // const yourBalance = balance && balance.toNumber && balance.toNumber();
 
 
-    // you usually go content.toString() after this...
-    const getFromIPFS = async hashToGet => {
-    for await (const file of ipfs.get(hashToGet)) {
-        if (!file.content) continue;
-        const content = new BufferList();
-        for await (const chunk of file.content) {
-        content.append(chunk);
-        }
-        console.log(content);
-        return content;
-    }
-    };
+    // // you usually go content.toString() after this...
+    // const getFromIPFS = async hashToGet => {
+    // for await (const file of ipfs.get(hashToGet)) {
+    //     if (!file.content) continue;
+    //     const content = new BufferList();
+    //     for await (const chunk of file.content) {
+    //     content.append(chunk);
+    //     }
+    //     console.log(content);
+    //     return content;
+    // }
+    // };
 
-    const [yourCollectibles, setYourCollectibles] = useState();
-    useEffect(() => {
-        console.log("balance", balance);
-        const updateYourCollectibles = async () => {
-          const collectibleUpdate = [];
-          for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
-            try {
-              console.log("iteration", tokenIndex);
-              const tokenId = await readContracts.YourCollectible.tokenOfOwnerByIndex(walletAddress, tokenIndex);
-              const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
-              const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
+    // const [yourCollectibles, setYourCollectibles] = useState();
+    // useEffect(() => {
+    //     console.log("balance", balance);
+    //     const updateYourCollectibles = async () => {
+    //       const collectibleUpdate = [];
+    //       for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
+    //         try {
+    //           console.log("iteration", tokenIndex);
+    //           const tokenId = await readContracts.YourCollectible.tokenOfOwnerByIndex(walletAddress, tokenIndex);
+    //           const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
+    //           const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
     
-              const jsonManifestBuffer = await getFromIPFS(ipfsHash);
+    //           const jsonManifestBuffer = await getFromIPFS(ipfsHash);
     
-              try {
-                const jsonManifest = JSON.parse(jsonManifestBuffer.toString());
-                console.log("jsonManifest", jsonManifest);
-                collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: walletAddress, ...jsonManifest });
-                console.log("--tokenURI: ", tokenURI);
-              } catch (e) {
-                console.log(e);
-              }
-            } catch (e) {
-              console.log(e);
-            }
-          }
-          setYourCollectibles(collectibleUpdate);
-        };
-        updateYourCollectibles();
-      }, [walletAddress, yourBalance]);
+    //           try {
+    //             const jsonManifest = JSON.parse(jsonManifestBuffer.toString());
+    //             console.log("jsonManifest", jsonManifest);
+    //             collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: walletAddress, ...jsonManifest });
+    //             console.log("--tokenURI: ", tokenURI);
+    //           } catch (e) {
+    //             console.log(e);
+    //           }
+    //         } catch (e) {
+    //           console.log(e);
+    //         }
+    //       }
+    //       setYourCollectibles(collectibleUpdate);
+    //     };
+    //     updateYourCollectibles();
+    //   }, [walletAddress, yourBalance]);
 
 
 //   const [tableDataSrc, setTableDataSrc] = useState();

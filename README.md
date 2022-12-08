@@ -1,6 +1,6 @@
 # OnRamp prototype app  
 
-> Build, mint, and send ERC721 NFT on Mumbai testnet 
+> Build, mint, and send ERC721 NFT on Polygon  
 
 Required: [Node](https://nodejs.org/dist/latest-v16.x/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable) and [Git](https://git-scm.com/downloads)
 
@@ -14,7 +14,7 @@ Get your own Infura project ID and secret from [Infura](https://infura.io/dashbo
 yarn install
 ```
 
-Currently, the testnet is pointing to `mumbai`. This can be changed by updating `defaultNetwork` in `packages/hardhat/hardhat.config.js`:
+Currently, the network is pointing to `matic`. This can be changed by updating `defaultNetwork` in `packages/hardhat/hardhat.config.js`:
 
  
 Generate a **deployer** account:

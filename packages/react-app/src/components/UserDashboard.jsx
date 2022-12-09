@@ -1,15 +1,12 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { Button, Card, Input, List, Menu } from "antd";
+import React, { useEffect, useState } from "react";
+import { Menu } from "antd";
 import { BrowserRouter, Link, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import jwt from "jsonwebtoken";
-import { useContractLoader, useContractReader, useEventListener, useGasPrice, useUserSigner, useExchangePrice } from "../hooks";
-import { Address, AddressInput, Contract, Account, PersonalDataForm, MyPersonalData, RegularUserConsentRequests, NFTBadges} from ".";
-import { INFURA_ID, INFURA_SECRET, NETWORKS } from "../constants";
-import { Transactor } from "../helpers";
+import { useContractLoader } from "../hooks";
+import { Contract, Account, PersonalDataForm, MyPersonalData, RegularUserConsentRequests, NFTBadges} from ".";
+import { INFURA_ID, NETWORKS } from "../constants";
 
 const { ethers } = require("ethers");
-const { BufferList } = require("bl");
-const ipfsAPI = require("ipfs-http-client");
 
 const targetNetwork = NETWORKS.matic;
 const blockExplorer = targetNetwork.blockExplorer;
@@ -19,32 +16,6 @@ const localProviderUrl = targetNetwork.rpcUrl;
 // as you deploy to other networks you can set REACT_APP_PROVIDER=https://dai.poa.network in packages/react-app/.env
 const localProviderUrlFromEnv = process.env.REACT_APP_PROVIDER ? process.env.REACT_APP_PROVIDER : localProviderUrl;
 const localProvider = new ethers.providers.StaticJsonRpcProvider(localProviderUrlFromEnv);
-
-const projectId = INFURA_ID;
-const projectSecret = INFURA_SECRET;
-const projectIdAndSecret = `${projectId}:${projectSecret}`;
-
-const ipfs = ipfsAPI({
-  host: "ipfs.infura.io",
-  port: "5001",
-  protocol: "https",
-  headers: {
-    authorization: `Basic ${Buffer.from(projectIdAndSecret).toString("base64")}`,
-  },
-});
-
-// you usually go content.toString() after this...
-const getFromIPFS = async hashToGet => {
-  for await (const file of ipfs.get(hashToGet)) {
-    if (!file.content) continue;
-    const content = new BufferList();
-    for await (const chunk of file.content) {
-      content.append(chunk);
-    }
-    console.log(content);
-    return content;
-  }
-};
 
 // 🛰 providers
 // attempt to connect to our own scaffold eth rpc and if that fails fall back to infura...
@@ -59,7 +30,6 @@ const mainnetInfura = navigator.onLine
 
 export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) {
   const mainnetProvider = scaffoldEthProvider && scaffoldEthProvider._network ? scaffoldEthProvider : mainnetInfura;
-  // const mainnetProvider = mainnetInfura;
 
   const history = useHistory();
   const logoutOfWeb3Modal = async () => {
@@ -78,42 +48,8 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
   const [route, setRoute] = useState();
   const [address, setAddress] = useState();
 
-  const [injectedProvider, setInjectedProvider] = useState();
-
-  useEffect(() => {
-    async function setProvider() {
-      const provider = await web3Modal.connect();
-      setInjectedProvider(new ethers.providers.Web3Provider(provider));
-    }
-    setProvider();
-  }, []);
-
-  // const price = useExchangePrice(targetNetwork, mainnetProvider);
-
-  const [ipfsDownHash, setIpfsDownHash] = useState();
-  const [sending, setSending] = useState();
-  const [downloading, setDownloading] = useState();
-  const [ipfsContent, setIpfsContent] = useState();
-
-  const [transferToAddresses, setTransferToAddresses] = useState({});
-
-  /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
-  const gasPrice = useGasPrice(targetNetwork, "fast");
-  console.log("gasPrice", gasPrice);
-
-  // The transactor wraps transactions and provides notificiations
-  const tx = Transactor(userSigner, gasPrice);
-
-  console.log("localProvider", localProvider);
-
   // Load in your local 📝 contract and read a value from it:
   const readContracts = useContractLoader(localProvider);
-  console.log("User dashboard readContracts", readContracts);
-
-  const localChainId = localProvider && localProvider._network && localProvider._network.chainId;
-
-  // If you want to make 🔐 write transactions to your contracts, use the userSigner:
-  const writeContracts = useContractLoader(userSigner, { chainId: localChainId });
 
   useEffect(() => {
     async function getAddress() {
@@ -125,47 +61,6 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
     }
     getAddress();
   }, [userSigner]);
-
-  // keep track of a variable from the contract in the local React state:
-  const balance = useContractReader(readContracts, "YourCollectible", "balanceOf", [address]);
-  // console.log("🤗 balance:", balance);
-
-  const yourBalance = balance && balance.toNumber && balance.toNumber();
-  const [yourCollectibles, setYourCollectibles] = useState();
-
-  // 📟 Listen for broadcast events
-  const transferEvents = useEventListener(readContracts, "YourCollectible", "Transfer", localProvider, 1);
-
-  useEffect(() => {
-    console.log("address: ", address);
-    console.log("yourBalance: ", yourBalance);
-    const updateYourCollectibles = async () => {
-      const collectibleUpdate = [];
-      for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
-        try {
-          console.log("iteration", tokenIndex);
-          const tokenId = await readContracts.YourCollectible.tokenOfOwnerByIndex(address, tokenIndex);
-          const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
-          const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
-
-          const jsonManifestBuffer = await getFromIPFS(ipfsHash);
-
-          try {
-            const jsonManifest = JSON.parse(jsonManifestBuffer.toString());
-            console.log("jsonManifest", jsonManifest);
-            collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: address, ...jsonManifest });
-            console.log("--tokenURI: ", tokenURI);
-          } catch (e) {
-            console.log(e);
-          }
-        } catch (e) {
-          console.log(e);
-        }
-      }
-      setYourCollectibles(collectibleUpdate);
-    };
-    updateYourCollectibles();
-  }, [address, yourBalance]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -252,59 +147,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
             <RegularUserConsentRequests />
           </Route>
           <Route exact path="/userDashboard/nft_badges">
-            {/* <NFTBadges localProvider={localProvider} /> */}
-            <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-              <List
-                bordered
-                dataSource={yourCollectibles}
-                renderItem={item => {
-                  const id = item.id.toNumber();
-                  return (
-                    <List.Item key={id + "_" + item.uri + "_" + item.owner}>
-                      <Card
-                        title={
-                          <div>
-                            <span style={{ fontSize: 16, marginRight: 8 }}>#{id}</span> {item.name}
-                          </div>
-                        }
-                      >
-                        <div>
-                          <img src={item.image} style={{ maxWidth: 150 }} alt="NFT badge" />
-                        </div>
-                        <div>{item.description}</div>
-                      </Card>
-
-                      <div>
-                        owner:{" "}
-                        <Address
-                          address={item.owner}
-                          ensProvider={mainnetProvider}
-                          blockExplorer={blockExplorer}
-                          fontSize={16}
-                        />
-                        <AddressInput
-                          ensProvider={mainnetProvider}
-                          placeholder="transfer to address"
-                          value={transferToAddresses[id]}
-                          onChange={newValue => {
-                            const update = {};
-                            update[id] = newValue;
-                            setTransferToAddresses({ ...transferToAddresses, ...update });
-                          }}
-                        />
-                        <Button
-                          onClick={() => {
-                            tx(writeContracts.YourCollectible.transferFrom(address, transferToAddresses[id], id));
-                          }}
-                        >
-                          Transfer
-                        </Button>
-                      </div>
-                    </List.Item>
-                  );
-                }}
-              />
-            </div>
+            <NFTBadges readContracts={readContracts} />
           </Route>
 
             {/*

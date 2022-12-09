@@ -39,8 +39,7 @@ export default function useContractLoader(providerOrSigner, config = {}) {
     let active = true;
 
     async function loadContracts() {
-      if (providerOrSigner && typeof providerOrSigner !== "undefined") {
-        console.log(`loading contracts`);
+      if (providerOrSigner) {
         try {
           // we need to check to see if this providerOrSigner has a signer or not
           let signer;
@@ -79,6 +78,8 @@ export default function useContractLoader(providerOrSigner, config = {}) {
             console.log(e);
           }
 
+          console.log("contractList", contractList);
+
           let combinedContracts = {};
 
           if (contractList[_chainId]) {
@@ -110,6 +111,8 @@ export default function useContractLoader(providerOrSigner, config = {}) {
         } catch (e) {
           console.log("ERROR LOADING CONTRACTS!!", e);
         }
+      } else {
+        console.log("Type of provider/signer is incorrect");
       }
     }
     loadContracts();

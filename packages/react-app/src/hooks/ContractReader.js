@@ -36,14 +36,10 @@ export default function useContractReader(contracts, contractName, functionName,
   const [value, setValue] = useState();
   const [tried, setTried] = useState(false);
 
-  console.log("initial value", value);
-
   useEffect(() => {
     if (typeof onChange === "function") {
       setTimeout(onChange.bind(this, value), 1);
     }
-
-    console.log("inside useeffect value", value);
   }, [value, onChange]);
 
   const updateValue = async () => {
@@ -62,9 +58,6 @@ export default function useContractReader(contracts, contractName, functionName,
       if (formatter && typeof formatter === "function") {
         newValue = formatter(newValue);
       }
-
-      console.log("newValue", newValue);
-      console.log("old value", value);
 
       // console.log("GOT VALUE",newValue)
       if (newValue !== value) {
@@ -93,11 +86,6 @@ export default function useContractReader(contracts, contractName, functionName,
     adjustPollTime,
     contracts && contracts[contractName],
   );
-
-  console.log("tried", tried);
-  console.log("contracts", contracts);
-  console.log("contract name", contractName);
-  // console.log("contracts[contractName]", contracts[contractName]);
 
   if (tried === false && contracts && contracts[contractName]) {
     updateValue();

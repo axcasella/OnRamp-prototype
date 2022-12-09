@@ -60,7 +60,9 @@ export default function NFTBadges({ readContracts }) {
           try {
             const jsonManifest = JSON.parse(jsonManifestBuffer.toString());
             console.log("jsonManifest", jsonManifest);
-            collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: walletAddress, ...jsonManifest });
+            const attributes = jsonManifest.attributes;
+            console.log("attributes", attributes);
+            collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: walletAddress, attributes, ...jsonManifest });
             console.log("--tokenURI: ", tokenURI);
           } catch (e) {
             console.log(e);
@@ -178,6 +180,23 @@ export default function NFTBadges({ readContracts }) {
 
               <div>
                 owner: <span>{item.owner}</span>
+              </div>
+
+              <div>
+                metadata: 
+                {item.attributes.map((attributes, index) => {
+                  return (
+                    <ul key={attributes.key}>
+                      {Object.keys(attributes).map(key => {
+                      return (
+                          <li key={key}>
+                            {key}:{attributes[key]}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  );
+                })}
               </div>
             </List.Item>
           );

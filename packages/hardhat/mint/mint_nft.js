@@ -46,7 +46,7 @@ const mintKYCBadgeNFT = async (address, country) => {
   // validate country first
   if (isBannedCountry(country)) {
     badgeImgURL =
-      "https://en.wikipedia.org/wiki/No_symbol#/media/File:ProhibitionSign2.svg";
+      "https://upload.wikimedia.org/wikipedia/commons/3/3f/Warning_Icon_%28simple_colors%29.png";
     console.log("country is banned from doing business");
   }
 

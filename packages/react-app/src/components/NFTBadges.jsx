@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Card, List } from "antd";
+import { Button, Card, List, Table } from "antd";
 import { useContractReader } from "../hooks";
 import { INFURA_ID, INFURA_SECRET } from "../constants";
 
@@ -22,6 +22,9 @@ const ipfs = ipfsAPI({
 
 export default function NFTBadges({ readContracts }) {
   const walletAddress = localStorage.getItem("walletAddress");
+
+  const [tableDataSrc, setTableDataSrc] = useState();
+  const [loading, setLoading] = useState(true);
 
   console.log("readContracts NFT badge", readContracts);
 
@@ -59,11 +62,11 @@ export default function NFTBadges({ readContracts }) {
 
           try {
             const jsonManifest = JSON.parse(jsonManifestBuffer.toString());
-            console.log("jsonManifest", jsonManifest);
+            // console.log("jsonManifest", jsonManifest);
             const attributes = jsonManifest.attributes;
-            console.log("attributes", attributes);
+            // console.log("attributes", attributes);
             collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: walletAddress, attributes, ...jsonManifest });
-            console.log("--tokenURI: ", tokenURI);
+            // console.log("--tokenURI: ", tokenURI);
           } catch (e) {
             console.log(e);
           }
@@ -72,93 +75,80 @@ export default function NFTBadges({ readContracts }) {
         }
       }
       setYourCollectibles(collectibleUpdate);
+      console.log("collectibleUpdate", collectibleUpdate)
+      setTableDataSrc(
+        collectibleUpdate.map(row => ({
+          walletAddress: row.owner,
+          status: row.attributes.AML > 7 && row.attributes.CRED_PROTOCOL_SCORE > 700 ? "Verified" : "Not Safe",
+          aml: row.attributes.AML,
+          cred: row.attributes.CRED_PROTOCOL_SCORE,
+          business: row.attributes.IS_BUSINESS,
+          country: row.attributes.COUNTRY,
+          badges: <img src={row.image} style={{ maxWidth: 50 }} alt="NFT badge" />,
+        })),
+      );
+      setLoading(false);
     };
     updateYourCollectibles();
   }, [walletAddress, yourBalance]);
 
-  //   const [tableDataSrc, setTableDataSrc] = useState();
-  //   const [loading, setLoading] = useState(true);
-
-  //   const getMyConsentRequests = async () => {
-  //     const response = await fetch(`http://localhost:8000/api/getConsentRequests/walletAddress/${walletAddress}`, {
-  //       method: "GET",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-
-  //     const data = await response.json();
-
-  //     if (response.status === 200 && data) {
-  //       setTableDataSrc(
-  //         data.consentRequests.map(row => ({
-  //           org: row,
-  //           walletAddress,
-  //           action: <Button type="primary">Give permission</Button>,
-  //         })),
-  //       );
-  //       setLoading(false);
-  //     } else {
-  //       alert("Failed to get consent requests");
-  //     }
-  //   };
-
-  //   const addConsent = async (address, org) => {
-  //     const response = await fetch(`http://localhost:8000/api/addConsent`, {
-  //       method: "POST",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         walletAddress: address,
-  //         org,
-  //       }),
-  //     });
-
-  //     const data = await response.json();
-
-  //     if (data.status === "ok") {
-  //       console.log("add consent success");
-  //     } else {
-  //       alert("Failed to add consent");
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     getMyConsentRequests();
-  //   }, [walletAddress]);
-
-  //   const columns = [
-  //     {
-  //       title: "Requesting org",
-  //       dataIndex: "org",
-  //       key: "org",
-  //       width: 200,
-  //     },
-  //     {
-  //       title: "Action",
-  //       dataIndex: "action",
-  //       key: "action",
-  //       width: 100,
-  //       onCell: (record, rowIndex) => {
-  //         return {
-  //           onClick: () => {
-  //             addConsent(record.walletAddress, record.org);
-  //           },
-  //         };
-  //       },
-  //     },
-  //   ];
-
-  // useEffect(() => {
-  //     console.log("yourCollectibles", yourCollectibles);
-  // }, [])
+  const columns = [
+    {
+      title: "Wallet address",
+      dataIndex: "walletAddress",
+      key: "org",
+      width: 250,
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      width: 50,
+    },
+    {
+      title: "AML Score",
+      dataIndex: "aml",
+      key: "aml",
+      width: 200,
+    },
+    {
+      title: "Credit Protocol Score",
+      dataIndex: "cred",
+      key: "cred",
+      width: 300,
+    },
+    {
+      title: "Business",
+      dataIndex: "business",
+      key: "business",
+      width: 100,
+    },
+    {
+      title: "Country",
+      dataIndex: "country",
+      key: "country",
+      width: 100,
+    },
+    {
+      title: "Badges",
+      dataIndex: "badges",
+      key: "badges",
+      width: 100,
+    },
+  ];
 
   return (
-    <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-      <List
+    <div style={{ width: 1200, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+      <div>
+          {loading ? (
+            "No users found"
+          ) : (
+            <div>
+              <Table columns={columns} dataSource={tableDataSrc} />
+            </div>
+        )}
+      </div>
+      {/* <List
         bordered
         dataSource={yourCollectibles}
         renderItem={item => {
@@ -201,7 +191,7 @@ export default function NFTBadges({ readContracts }) {
             </List.Item>
           );
         }}
-      />
+      /> */}
     </div>
   );
 }

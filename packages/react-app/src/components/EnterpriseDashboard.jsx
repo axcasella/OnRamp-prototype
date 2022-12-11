@@ -87,12 +87,6 @@ export default function EnterpriseDashboard() {
       key: "walletAddress",
       width: 500,
     },
-    // {
-    //     title: "Available Action",
-    //     dataIndex: "displayText",
-    //     key: "displayText",
-    //     width: 100,
-    // },
     {
       title: "Available Action",
       dataIndex: "displayText",

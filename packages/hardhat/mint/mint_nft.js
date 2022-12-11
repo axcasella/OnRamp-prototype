@@ -39,8 +39,17 @@ const isBannedCountry = (country) => {
 };
 
 // @param address - address to mint to
-// @param metadata - data that will be on IPFS
-const mintKYCBadgeNFT = async (address, country) => {
+// @param country - country address resides in
+// @param amlValue -  AML value, between 1-10
+// @param credProtocolScore - Cred protocol score,
+// @param isBusiness - is this address a business
+const mintKYCBadgeNFT = async (
+  address,
+  country,
+  amlValue,
+  credProtocolScore,
+  isBusiness
+) => {
   let badgeImgURL =
     "https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg";
   // validate country first
@@ -62,28 +71,13 @@ const mintKYCBadgeNFT = async (address, country) => {
     external_url: "",
     image: badgeImgURL,
     name: "KYC Verified Badge",
-    attributes: [
-      {
-        type: "AML",
-        value: "8",
-      },
-      {
-        type: "DID",
-        value: address,
-      },
-      {
-        type: "CRED_PROTOCOL_SCORE",
-        value: "700",
-      },
-      {
-        type: "IS_BUSINESS",
-        value: "false",
-      },
-      {
-        type: "COUNTRY",
-        value: country,
-      },
-    ],
+    attributes: {
+      AML: amlValue,
+      DID: address,
+      CRED_PROTOCOL_SCORE: credProtocolScore,
+      IS_BUSINESS: isBusiness,
+      COUNTRY: country,
+    },
   };
 
   let uploaded = {};

@@ -75,14 +75,14 @@ export default function NFTBadges({ readContracts }) {
         }
       }
       setYourCollectibles(collectibleUpdate);
-      console.log("collectibleUpdate", collectibleUpdate)
+      console.log("collectibleUpdate", collectibleUpdate);
       setTableDataSrc(
         collectibleUpdate.map(row => ({
           walletAddress: row.owner,
-          status: row.attributes.AML > 7 && row.attributes.CRED_PROTOCOL_SCORE > 700 ? "Verified" : "Not Safe",
+          verified: row.verified ? "Yes" : "No",
           aml: row.attributes.AML,
           cred: row.attributes.CRED_PROTOCOL_SCORE,
-          business: row.attributes.IS_BUSINESS,
+          business: row.attributes.IS_BUSINESS ? "Yes" : "No",
           country: row.attributes.COUNTRY,
           badges: <img src={row.image} style={{ maxWidth: 50 }} alt="NFT badge" />,
         })),
@@ -100,25 +100,25 @@ export default function NFTBadges({ readContracts }) {
       width: 250,
     },
     {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
+      title: "Verified",
+      dataIndex: "verified",
+      key: "verified",
       width: 50,
     },
     {
       title: "AML Score",
       dataIndex: "aml",
       key: "aml",
-      width: 200,
+      width: 150,
     },
     {
       title: "Credit Protocol Score",
       dataIndex: "cred",
       key: "cred",
-      width: 300,
+      width: 150,
     },
     {
-      title: "Business",
+      title: "Business Account",
       dataIndex: "business",
       key: "business",
       width: 100,
@@ -133,7 +133,7 @@ export default function NFTBadges({ readContracts }) {
       title: "Badges",
       dataIndex: "badges",
       key: "badges",
-      width: 100,
+      width: 50,
     },
   ];
 
@@ -148,50 +148,6 @@ export default function NFTBadges({ readContracts }) {
             </div>
         )}
       </div>
-      {/* <List
-        bordered
-        dataSource={yourCollectibles}
-        renderItem={item => {
-          const id = item.id.toNumber();
-          return (
-            <List.Item key={id + "_" + item.uri + "_" + item.owner}>
-              <Card
-                title={
-                  <div>
-                    <span style={{ fontSize: 16, marginRight: 8 }}>#{id}</span> {item.name}
-                  </div>
-                }
-              >
-                <div>
-                  <img src={item.image} style={{ maxWidth: 150 }} alt="NFT badge" />
-                </div>
-                <div>{item.description}</div>
-              </Card>
-
-              <div>
-                owner: <span>{item.owner}</span>
-              </div>
-
-              <div>
-                metadata: 
-                {item.attributes.map((attributes, index) => {
-                  return (
-                    <ul key={attributes.key}>
-                      {Object.keys(attributes).map(key => {
-                      return (
-                          <li key={key}>
-                            {key}:{attributes[key]}
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  );
-                })}
-              </div>
-            </List.Item>
-          );
-        }}
-      /> */}
     </div>
   );
 }

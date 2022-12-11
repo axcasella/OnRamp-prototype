@@ -4,4 +4,8 @@ const arrayRemove = (arr, value) => {
   });
 };
 
-module.exports = { arrayRemove };
+const getRandomFromMinMax = (min, max) => {
+  return Math.floor(Math.random() * (max - min) + min);
+};
+
+module.exports = { arrayRemove, getRandomFromMinMax };

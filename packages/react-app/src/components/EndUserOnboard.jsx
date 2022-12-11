@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Form } from "antd";
 import { useHistory } from "react-router-dom";
 
-export default function RegularUserOnboard({ web3Modal, loadWeb3Modal, userSigner }) {
+export default function EndUserOnboard({ web3Modal, loadWeb3Modal, userSigner }) {
   const history = useHistory();
   const [address, setAddress] = useState();
 
@@ -23,7 +23,7 @@ export default function RegularUserOnboard({ web3Modal, loadWeb3Modal, userSigne
   const logoutOfWeb3Modal = async () => {
     await web3Modal.clearCachedProvider();
   
-    history.replace("/RegularUserOnboard");
+    history.replace("/EndUserOnboard");
     localStorage.removeItem("walletAddress");
 
     setTimeout(() => {

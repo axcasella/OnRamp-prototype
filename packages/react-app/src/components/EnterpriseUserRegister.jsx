@@ -51,7 +51,7 @@ export default function EnterpriseUserRegister() {
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <Form labelCol={{ span: 4 }} wrapperCol={{ span: 14 }} layout="horizontal" onSubmit={registerUser}>
         <Form.Item>
-          <h2>Partner sign up</h2>
+          <h2>Enterprise sign up</h2>
         </Form.Item>
         <Form.Item label="Name">
           <Input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} />

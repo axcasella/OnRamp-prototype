@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button } from "antd";
 
-export default function RegularUserConsentRequests() {
+export default function EndUserConsentRequests() {
   const walletAddress = localStorage.getItem("walletAddress");
 
   const [tableDataSrc, setTableDataSrc] = useState();

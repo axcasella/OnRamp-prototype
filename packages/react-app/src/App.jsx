@@ -6,7 +6,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import { BrowserRouter, Route, Switch, Link, useHistory } from "react-router-dom";
 import "./App.css";
-import { EnterpriseUserLogin, EnterpriseUserRegister, RegularUserOnboard, UserDashboard, EnterpriseDashboard, Header, EnterpriseViewKYCData } from "./components";
+import { EnterpriseUserLogin, EnterpriseUserRegister, EndUserOnboard, UserDashboard, EnterpriseDashboard, Header, EnterpriseViewKYCData } from "./components";
 import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { useExchangePrice, useUserSigner } from "./hooks";
 
@@ -151,7 +151,7 @@ function App() {
     const logoutOfWeb3Modal = async () => {
       await web3Modal.clearCachedProvider();
 
-      history.replace("/RegularUserOnboard");
+      history.replace("/EndUserOnboard");
       localStorage.removeItem("walletAddress");
 
       setTimeout(() => {
@@ -185,7 +185,7 @@ function App() {
               }}
               to="/EnterpriseUserRegister"
             >
-              Partner User Registration
+              Enterprise User Registration
             </Link>
           </Menu.Item>
 
@@ -196,18 +196,18 @@ function App() {
               }}
               to="/EnterpriseUserLogin"
             >
-              Partner User Login
+              Enterprise User Login
             </Link>
           </Menu.Item>
 
-          <Menu.Item key="/RegularUserOnboard">
+          <Menu.Item key="/EndUserOnboard">
             <Link
               onClick={() => {
-                setRoute("/RegularUserOnboard");
+                setRoute("/EndUserOnboard");
               }}
-              to="/RegularUserOnboard"
+              to="/EndUserOnboard"
             >
-              Regular User Onboarding
+              End User Onboarding
             </Link>
           </Menu.Item>
         </Menu>
@@ -218,9 +218,9 @@ function App() {
           <Route exact path="/EnterpriseUserRegister" component={EnterpriseUserRegister} />
           <Route
             exact
-            path="/RegularUserOnboard"
+            path="/EndUserOnboard"
             render={() => (
-              <RegularUserOnboard web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} userSigner={userSigner} />
+              <EndUserOnboard web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} userSigner={userSigner} />
             )}
           />
           <Route

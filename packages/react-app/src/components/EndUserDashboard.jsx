@@ -3,7 +3,7 @@ import { Menu } from "antd";
 import { BrowserRouter, Link, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import jwt from "jsonwebtoken";
 import { useContractLoader } from "../hooks";
-import { Contract, Account, PersonalDataForm, MyPersonalData, RegularUserConsentRequests, NFTBadges} from ".";
+import { Contract, Account, PersonalDataForm, MyPersonalData, EndUserConsentRequests, NFTBadges} from ".";
 import { INFURA_ID, NETWORKS } from "../constants";
 
 const { ethers } = require("ethers");
@@ -35,7 +35,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
   const logoutOfWeb3Modal = async () => {
     await web3Modal.clearCachedProvider();
   
-    history.replace("/RegularUserOnboard");
+    history.replace("/EndUserOnboard");
     localStorage.removeItem("walletAddress");
 
     setTimeout(() => {
@@ -114,12 +114,12 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
               My Badges
             </Link>
           </Menu.Item>
-          <Menu.Item key="/userDashboard/RegularUserConsentRequests">
+          <Menu.Item key="/userDashboard/EndUserConsentRequests">
             <Link
               onClick={() => {
-                setRoute("/userDashboard/RegularUserConsentRequests");
+                setRoute("/userDashboard/EndUserConsentRequests");
               }}
-              to="/userDashboard/RegularUserConsentRequests"
+              to="/userDashboard/EndUserConsentRequests"
             >
               My Consent Requests
             </Link>
@@ -143,8 +143,8 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
           <Route exact path="/userDashboard/MyPersonalData">
             <MyPersonalData />
           </Route>
-          <Route exact path="/userDashboard/RegularUserConsentRequests">
-            <RegularUserConsentRequests />
+          <Route exact path="/userDashboard/EndUserConsentRequests">
+            <EndUserConsentRequests />
           </Route>
           <Route exact path="/userDashboard/nft_badges">
             <NFTBadges readContracts={readContracts} />

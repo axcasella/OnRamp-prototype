@@ -3,7 +3,7 @@ import { Menu } from "antd";
 import { BrowserRouter, Link, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import jwt from "jsonwebtoken";
 import { useContractLoader } from "../hooks";
-import { Contract, Account, PersonalDataForm, MyPersonalData, EndUserConsentRequests, NFTBadges} from ".";
+import { Contract, Account, EndUserPersonalDataForm, EndUserPersonalData, EndUserConsentRequests, NFTBadges } from ".";
 import { INFURA_ID, NETWORKS } from "../constants";
 
 const { ethers } = require("ethers");
@@ -28,7 +28,7 @@ const mainnetInfura = navigator.onLine
   : null;
 // ( ⚠️ Getting "failed to meet quorum" errors? Check your INFURA_I
 
-export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) {
+export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner }) {
   const mainnetProvider = scaffoldEthProvider && scaffoldEthProvider._network ? scaffoldEthProvider : mainnetInfura;
 
   const history = useHistory();
@@ -84,52 +84,52 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
     <div style={{ width: 1400, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <BrowserRouter>
         <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
-          <Menu.Item key="/userDashboard/personalDataForm">
+          <Menu.Item key="/endUserDashboard/personalDataForm">
             <Link
               onClick={() => {
-                setRoute("/userDashboard/personalDataForm");
+                setRoute("/endUserDashboard/personalDataForm");
               }}
-              to="/userDashboard/personalDataForm"
+              to="/endUserDashboard/personalDataForm"
             >
               Enter KYC
             </Link>
           </Menu.Item>
-          <Menu.Item key="/userDashboard/MyPersonalData">
+          <Menu.Item key="/endUserDashboard/EndUserPersonalData">
             <Link
               onClick={() => {
-                setRoute("/userDashboard/MyPersonalData");
+                setRoute("/endUserDashboard/EndUserPersonalData");
               }}
-              to="/userDashboard/MyPersonalData"
+              to="/endUserDashboard/EndUserPersonalData"
             >
               My KYC Info
             </Link>
           </Menu.Item>
-          <Menu.Item key="/userDashboard/nft_badges">
+          <Menu.Item key="/endUserDashboard/nft_badges">
             <Link
               onClick={() => {
-                setRoute("/userDashboard/nft_badges");
+                setRoute("/endUserDashboard/nft_badges");
               }}
-              to="/userDashboard/nft_badges"
+              to="/endUserDashboard/nft_badges"
             >
               My Badges
             </Link>
           </Menu.Item>
-          <Menu.Item key="/userDashboard/EndUserConsentRequests">
+          <Menu.Item key="/endUserDashboard/EndUserConsentRequests">
             <Link
               onClick={() => {
-                setRoute("/userDashboard/EndUserConsentRequests");
+                setRoute("/endUserDashboard/EndUserConsentRequests");
               }}
-              to="/userDashboard/EndUserConsentRequests"
+              to="/endUserDashboard/EndUserConsentRequests"
             >
               My Consent Requests
             </Link>
           </Menu.Item>
-          <Menu.Item key="/userDashboard/debugcontracts">
+          <Menu.Item key="/endUserDashboard/debugcontracts">
             <Link
               onClick={() => {
-                setRoute("/userDashboard/debugcontracts");
+                setRoute("/endUserDashboard/debugcontracts");
               }}
-              to="/userDashboard/debugcontracts"
+              to="/endUserDashboard/debugcontracts"
             >
               Debug Contracts
             </Link>
@@ -137,16 +137,16 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
         </Menu>
         
         <Switch>
-          <Route exact path={["/userDashboard", "/userDashboard/personalDataForm"]}>
-            <PersonalDataForm />
+          <Route exact path={["/endUserDashboard", "/endUserDashboard/personalDataForm"]}>
+            <EndUserPersonalDataForm />
           </Route>
-          <Route exact path="/userDashboard/MyPersonalData">
-            <MyPersonalData />
+          <Route exact path="/endUserDashboard/EndUserPersonalData">
+            <EndUserPersonalData />
           </Route>
-          <Route exact path="/userDashboard/EndUserConsentRequests">
+          <Route exact path="/endUserDashboard/EndUserConsentRequests">
             <EndUserConsentRequests />
           </Route>
-          <Route exact path="/userDashboard/nft_badges">
+          <Route exact path="/endUserDashboard/nft_badges">
             <NFTBadges readContracts={readContracts} walletAddress={address} />
           </Route>
 
@@ -154,7 +154,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
                 <Contract/> component will automatically parse your ABI and give you a form to interact with it locally
             */}
 
-          <Route exact path="/userDashboard/debugcontracts">
+          <Route exact path="/endUserDashboard/debugcontracts">
             <Contract
               name="YourCollectible"
               signer={userSigner}

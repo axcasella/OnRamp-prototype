@@ -7,7 +7,7 @@ export default function EndUserOnboard({ web3Modal, loadWeb3Modal, userSigner })
   const [address, setAddress] = useState();
 
   const routeChange = () => { 
-    history.push("/userDashboard");
+    history.push("/endUserDashboard");
   };
 
   useEffect(() => {

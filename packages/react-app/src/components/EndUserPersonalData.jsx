@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button } from "antd";
 
-export default function MyPersonalData() {
+export default function EndUserPersonalData() {
   const walletAddress = localStorage.getItem("walletAddress");
 
   const [tableDataSrc, setTableDataSrc] = useState();

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Button, Form, Input } from "antd";
 
-export default function PersonalDataForm() {
+export default function EndUserPersonalDataForm() {
   const history = useHistory();
 
   const walletAddress = localStorage.getItem("walletAddress");
@@ -95,7 +95,7 @@ export default function PersonalDataForm() {
 
     if (response.status === 200 && data) {
       setSubmittedData(true);
-      history.push("/userDashboard/MyPersonalData");
+      history.push("/endUserDashboard/EndUserPersonalData");
     } 
   };
 

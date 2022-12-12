@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { Table, Button } from "antd";
 import jwt from "jsonwebtoken";
 
-export default function EnterpriseDashboard() {
+export default function EnterpriseUserDashboard() {
   const history = useHistory();
 
   const token = localStorage.getItem("token");
@@ -20,7 +20,7 @@ export default function EnterpriseDashboard() {
   }, [token]);
 
   const viewData = walletAddress => {
-    history.push(`/EnterpriseViewKYCData/${walletAddress}`);
+    history.push(`/EnterpriseUserViewKYCData/${walletAddress}`);
   };
 
   const requestConsent = async (walletAddress, org) => {

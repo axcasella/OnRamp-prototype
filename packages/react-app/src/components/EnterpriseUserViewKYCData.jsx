@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { Table, Button } from "antd";
 
-export default function EnterpriseViewKYCData() {
+export default function EnterpriseUserViewKYCData() {
   const params = useParams();
   const walletAddress = params.walletAddress;
 

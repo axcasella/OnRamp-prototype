@@ -24,7 +24,7 @@ export default function EnterpriseUserLogin() {
 
     if (data.user) {
       localStorage.setItem("token", data.user);
-      window.location.href = "/EnterpriseDashboard";
+      window.location.href = "/EnterpriseUserDashboard";
     } else {
       localStorage.removeItem("token");
       alert("login failed");

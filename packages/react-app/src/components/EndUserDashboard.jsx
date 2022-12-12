@@ -147,7 +147,7 @@ export default function UserDashboard({ web3Modal, loadWeb3Modal, userSigner }) 
             <EndUserConsentRequests />
           </Route>
           <Route exact path="/userDashboard/nft_badges">
-            <NFTBadges readContracts={readContracts} />
+            <NFTBadges readContracts={readContracts} walletAddress={address} />
           </Route>
 
             {/*

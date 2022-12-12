@@ -20,8 +20,8 @@ const ipfs = ipfsAPI({
   },
 });
 
-export default function NFTBadges({ readContracts }) {
-  const walletAddress = localStorage.getItem("walletAddress");
+export default function NFTBadges({ readContracts, walletAddress }) {
+  console.log("walletAddress", walletAddress);
 
   const [tableDataSrc, setTableDataSrc] = useState();
   const [loading, setLoading] = useState(true);
@@ -79,7 +79,7 @@ export default function NFTBadges({ readContracts }) {
       setTableDataSrc(
         collectibleUpdate.map(row => ({
           walletAddress: row.owner,
-          verified: row.verified ? "Yes" : "No",
+          verified: row.verified ? "Passed" : "Failed",
           aml: row.attributes.AML,
           cred: row.attributes.CRED_PROTOCOL_SCORE,
           business: row.attributes.IS_BUSINESS ? "Yes" : "No",

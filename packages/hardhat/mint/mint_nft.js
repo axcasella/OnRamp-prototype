@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* eslint no-use-before-define: "warn" */
 const { INFURA_ID, INFURA_SECRET } = require("../constants.js");
 const { ethers, getNamedAccounts } = require("hardhat");
@@ -56,7 +57,7 @@ const mintKYCBadgeNFT = async (address, country) => {
     console.log("country is banned from doing business");
   }
 
-  const amlValue = getRandomFromMinMax(6, 10); // AML value
+  const amlValue = getRandomFromMinMax(5, 10); // AML value
   const credProtocolScore = getRandomFromMinMax(600, 1000); // Cred protocol score
   const isBusiness = false; // use false as default for prototype
 
@@ -67,14 +68,32 @@ const mintKYCBadgeNFT = async (address, country) => {
     external_url: "",
     image: verified ? verifiedBadgeImgURL : notVerifiedBadgeImgURL,
     name: "KYC Badge",
-    verified,
-    attributes: {
-      AML: amlValue,
-      DID: address,
-      CRED_PROTOCOL_SCORE: credProtocolScore,
-      IS_BUSINESS: isBusiness,
-      COUNTRY: country,
-    },
+    attributes: [
+      {
+        trait_type: "AML",
+        value: amlValue,
+      },
+      {
+        trait_type: "CRED_PROTOCOL_SCORE",
+        value: credProtocolScore,
+      },
+      {
+        trait_type: "IS_BUSINESS",
+        value: isBusiness ? "TRUE" : "FALSE",
+      },
+      {
+        trait_type: "COUNTRY",
+        value: country,
+      },
+      {
+        trait_type: "DID",
+        value: address,
+      },
+      {
+        trait_type: "VERIFIED",
+        value: verified ? "TRUE" : "FALSE",
+      },
+    ],
   };
 
   return mintNFT(address, kycBadge);

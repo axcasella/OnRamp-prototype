@@ -84,12 +84,12 @@ export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner 
     <div style={{ width: 1400, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <BrowserRouter>
         <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
-          <Menu.Item key="/endUserDashboard/personalDataForm">
+          <Menu.Item key="/endUserDashboard/EndUserPersonalDataForm">
             <Link
               onClick={() => {
-                setRoute("/endUserDashboard/personalDataForm");
+                setRoute("/endUserDashboard/EndUserPersonalDataForm");
               }}
-              to="/endUserDashboard/personalDataForm"
+              to="/endUserDashboard/EndUserPersonalDataForm"
             >
               Enter KYC
             </Link>
@@ -137,7 +137,7 @@ export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner 
         </Menu>
         
         <Switch>
-          <Route exact path={["/endUserDashboard", "/endUserDashboard/personalDataForm"]}>
+          <Route exact path={["/endUserDashboard", "/endUserDashboard/EndUserPersonalDataForm"]}>
             <EndUserPersonalDataForm />
           </Route>
           <Route exact path="/endUserDashboard/EndUserPersonalData">

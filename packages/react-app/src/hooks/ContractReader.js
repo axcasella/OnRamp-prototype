@@ -23,8 +23,6 @@ const DEBUG = false;
 */
 
 export default function useContractReader(contracts, contractName, functionName, args, pollTime, formatter, onChange) {
-  console.log("functionName", functionName);
-
   let adjustPollTime = 0;
   if (pollTime) {
     adjustPollTime = pollTime;

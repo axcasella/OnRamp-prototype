@@ -174,11 +174,14 @@ export default function EnterpriseUserViewKYCData() {
         <div>
           <Table columns={columns} dataSource={tableDataSrc} />
           {showDecryptButton ? (
-            <Button onClick={getMyPersonalDecryptedData}> Decrypt user data </Button>
+            <Button type="primary" onClick={getMyPersonalDecryptedData}>
+              {" "}
+              Decrypt user data{" "}
+            </Button>
           ) : (
             <h4>Your dapp has access to this user's encrypted data</h4>
           )}
-          <Button style={{ marginLeft: 10 }} type="primary" onClick={() => history.goBack()}>
+          <Button style={{ marginLeft: 10 }} onClick={() => history.goBack()}>
             Back
           </Button>
         </div>

@@ -83,6 +83,7 @@ export default function EndUserPersonalDataForm() {
   };
 
   const checkIfUserSubmitted = async () => {
+    console.log("checking for wallet: ", walletAddress);
     const response = await fetch(`http://localhost:8000/api/getUserEncryptedKYCData/walletAddress/${walletAddress}`, {
       method: "GET",
       headers: {
@@ -95,7 +96,7 @@ export default function EndUserPersonalDataForm() {
 
     if (response.status === 200 && data) {
       setSubmittedData(true);
-      history.push("/endUserDashboard/EndUserPersonalData");
+      history.replace("/endUserDashboard/EndUserPersonalData");
     } 
   };
 

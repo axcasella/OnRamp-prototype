@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Menu } from "antd";
-import { BrowserRouter, Link, Route, Switch, useHistory, useLocation } from "react-router-dom";
-import jwt from "jsonwebtoken";
+import { BrowserRouter, Link, Route, Switch, useHistory } from "react-router-dom";
 import { useContractLoader } from "../hooks";
 import { Contract, Account, EndUserPersonalDataForm, EndUserPersonalData, EndUserConsentRequests, NFTBadges } from ".";
 import { INFURA_ID, NETWORKS } from "../constants";
@@ -43,8 +42,6 @@ export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner 
     }, 1);
   };
 
-  const location = useLocation();
-
   const [route, setRoute] = useState();
   const [address, setAddress] = useState();
 
@@ -61,24 +58,6 @@ export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner 
     }
     getAddress();
   }, [userSigner]);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      const loggedInUser = jwt.decode(token);
-      if (!loggedInUser) {
-        localStorage.removeItem("token");
-        history.replace("/EnterpriseUserLogin");
-      } else {
-        // populate user dashboard
-        console.log("show dashboard for address ", address);
-      }
-    } else {
-      console.log("no token found");
-      alert("no token");
-    }
-  }, [location.pathname]);
 
   return (
     <div style={{ width: 1400, margin: "auto", marginTop: 32, paddingBottom: 32 }}>

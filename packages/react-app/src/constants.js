@@ -66,14 +66,15 @@ export const NETWORKS = {
     blockExplorer: "https://blockscout.com/poa/xdai/",
   },
   matic: {
+    // https://wiki.polygon.technology/docs/develop/network-details/endpoints
     name: "matic",
     color: "#2bbdf7",
     chainId: 137,
     price: 1,
     gasPrice: 100000000000,
-    rpcUrl: "https://rpc-mainnet.maticvigil.com",
+    rpcUrl: "https://polygon-rpc.com/",
     faucet: "https://faucet.matic.network/",
-    blockExplorer: "https://explorer-mainnet.maticvigil.com//",
+    blockExplorer: "https://polygonscan.com/",
   },
   mumbai: {
     name: "mumbai",

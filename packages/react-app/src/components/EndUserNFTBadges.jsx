@@ -3,18 +3,18 @@ import { Table } from "antd";
 import { getNFTAndMetaData } from "../helpers/metadata";
 import { useContractReader } from "../hooks";
 
-export default function NFTBadges({ readContracts, walletAddress }) {
+export default function EndUserNFTBadges({ readContracts, walletAddress }) {
   const [tableDataSrc, setTableDataSrc] = useState();
   const [loading, setLoading] = useState(true);
 
   const balance = useContractReader(readContracts, "YourCollectible", "balanceOf", [walletAddress]);
 
-  const [myNFTs, setYourCollectibles] = useState();
+  const [myNFTs, setMyNFTs] = useState();
   useEffect(() => {
     if (!myNFTs) {
-      const setMyNFTs = async () => {
+      const getData = async () => {
         const nfts = await getNFTAndMetaData(balance, readContracts, walletAddress);
-        setYourCollectibles(nfts);
+        setMyNFTs(nfts);
         console.log("nfts", nfts);
         setTableDataSrc(
           // attributes [AML, CRED_PROTOCOL_SCORE, IS_BUSINESS, COUNTRY, DID, VERIFIED]
@@ -31,7 +31,7 @@ export default function NFTBadges({ readContracts, walletAddress }) {
         );
         setLoading(false);
       };
-      setMyNFTs();
+      getData();
     }
   }, [balance]);
 
@@ -40,7 +40,7 @@ export default function NFTBadges({ readContracts, walletAddress }) {
       title: "Wallet address",
       dataIndex: "address",
       key: "org",
-      width: 250,
+      width: 225,
     },
     {
       title: "Verified",
@@ -52,7 +52,7 @@ export default function NFTBadges({ readContracts, walletAddress }) {
       title: "AML Score",
       dataIndex: "aml",
       key: "aml",
-      width: 150,
+      width: 100,
     },
     {
       title: "Credit Protocol Score",
@@ -64,7 +64,7 @@ export default function NFTBadges({ readContracts, walletAddress }) {
       title: "Business Account",
       dataIndex: "business",
       key: "business",
-      width: 100,
+      width: 125,
     },
     {
       title: "Country",

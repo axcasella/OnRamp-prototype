@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Menu } from "antd";
 import { BrowserRouter, Link, Route, Switch, useHistory } from "react-router-dom";
 import { useContractLoader } from "../hooks";
-import { Contract, Account, EndUserPersonalDataForm, EndUserPersonalData, EndUserConsentRequests, NFTBadges } from ".";
+import { Contract, Account, EndUserPersonalDataForm, EndUserPersonalData, EndUserConsentRequests, EndUserNFTBadges } from ".";
 import { INFURA_ID, NETWORKS } from "../constants";
 
 const { ethers } = require("ethers");
@@ -126,7 +126,7 @@ export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner 
             <EndUserConsentRequests />
           </Route>
           <Route exact path="/endUserDashboard/nft_badges">
-            <NFTBadges readContracts={readContracts} walletAddress={address} />
+            <EndUserNFTBadges readContracts={readContracts} walletAddress={address} />
           </Route>
 
             {/*

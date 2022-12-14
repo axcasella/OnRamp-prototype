@@ -26,4 +26,4 @@ export { default as EndUserPersonalData } from "./EndUserPersonalData";
 export { default as EnterpriseUserViewKYCData } from "./EnterpriseUserViewKYCData";
 export { default as EnterpriseUserDashboard } from "./EnterpriseUserDashboard";
 export { default as EndUserConsentRequests } from "./EndUserConsentRequests";
-export { default as NFTBadges } from "./NFTBadges";
+export { default as EndUserNFTBadges } from "./EndUserNFTBadges";

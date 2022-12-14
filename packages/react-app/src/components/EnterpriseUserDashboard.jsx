@@ -25,7 +25,6 @@ export default function EnterpriseUserDashboard() {
   const [loggedInUser, setLoggedInUser] = useState();
   const [loggedInUserOrg, setLoggedInUserOrg] = useState();
   const [contract, setContract] = useState();
-  // const [addressList, setAddressList] = useState();
 
   useEffect(() => {
     const tokenUser = jwt.decode(token);

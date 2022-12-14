@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Menu } from "antd";
 import { BrowserRouter, Link, Route, Switch, useHistory } from "react-router-dom";
 import { useContractLoader } from "../hooks";
-import { Contract, Account, EndUserPersonalDataForm, EndUserPersonalData, EndUserConsentRequests, EndUserNFTBadges } from ".";
+import { Contract, Account, EndUserPersonalDataForm, EndUserPersonalData, EndUserNFTBadges } from ".";
 import { INFURA_ID, NETWORKS } from "../constants";
 
 const { ethers } = require("ethers");
@@ -93,16 +93,6 @@ export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner 
               My Badges
             </Link>
           </Menu.Item>
-          <Menu.Item key="/endUserDashboard/EndUserConsentRequests">
-            <Link
-              onClick={() => {
-                setRoute("/endUserDashboard/EndUserConsentRequests");
-              }}
-              to="/endUserDashboard/EndUserConsentRequests"
-            >
-              My Consent Requests
-            </Link>
-          </Menu.Item>
           <Menu.Item key="/endUserDashboard/debugcontracts">
             <Link
               onClick={() => {
@@ -121,9 +111,6 @@ export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner 
           </Route>
           <Route exact path="/endUserDashboard/EndUserPersonalData">
             <EndUserPersonalData />
-          </Route>
-          <Route exact path="/endUserDashboard/EndUserConsentRequests">
-            <EndUserConsentRequests />
           </Route>
           <Route exact path="/endUserDashboard/nft_badges">
             <EndUserNFTBadges readContracts={readContracts} walletAddress={address} />

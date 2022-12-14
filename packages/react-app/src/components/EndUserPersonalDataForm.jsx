@@ -96,8 +96,8 @@ export default function EndUserPersonalDataForm() {
 
     if (response.status === 200 && data) {
       setSubmittedData(true);
-      history.replace("/endUserDashboard/EndUserPersonalData");
-    } 
+      history.replace("/EndUserPersonalData");
+    }
   };
 
   useEffect(() => {

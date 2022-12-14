@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Menu } from "antd";
 import { BrowserRouter, Link, Route, Switch, useHistory } from "react-router-dom";
+import { FormOutlined, FileProtectOutlined, SafetyCertificateOutlined, RocketOutlined } from "@ant-design/icons";
 import { useContractLoader } from "../hooks";
 import { Contract, Account, EndUserPersonalDataForm, EndUserPersonalData, EndUserNFTBadges } from ".";
 import { INFURA_ID, NETWORKS } from "../constants";
+
+const { SubMenu } = Menu;
 
 const { ethers } = require("ethers");
 
@@ -33,7 +36,7 @@ export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner 
   const history = useHistory();
   const logoutOfWeb3Modal = async () => {
     await web3Modal.clearCachedProvider();
-  
+
     history.replace("/EndUserOnboard");
     localStorage.removeItem("walletAddress");
 
@@ -60,91 +63,71 @@ export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner 
   }, [userSigner]);
 
   return (
-    <div style={{ width: 1400, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-      <BrowserRouter>
-        <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
-          <Menu.Item key="/endUserDashboard/EndUserPersonalDataForm">
-            <Link
-              onClick={() => {
-                setRoute("/endUserDashboard/EndUserPersonalDataForm");
-              }}
-              to="/endUserDashboard/EndUserPersonalDataForm"
-            >
-              Enter KYC
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/endUserDashboard/EndUserPersonalData">
-            <Link
-              onClick={() => {
-                setRoute("/endUserDashboard/EndUserPersonalData");
-              }}
-              to="/endUserDashboard/EndUserPersonalData"
-            >
-              My KYC Info
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/endUserDashboard/nft_badges">
-            <Link
-              onClick={() => {
-                setRoute("/endUserDashboard/nft_badges");
-              }}
-              to="/endUserDashboard/nft_badges"
-            >
-              My Badges
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/endUserDashboard/debugcontracts">
-            <Link
-              onClick={() => {
-                setRoute("/endUserDashboard/debugcontracts");
-              }}
-              to="/endUserDashboard/debugcontracts"
-            >
-              Debug Contracts
-            </Link>
-          </Menu.Item> 
-        </Menu>
-        
-        <Switch>
-          <Route exact path={["/endUserDashboard", "/endUserDashboard/EndUserPersonalDataForm"]}>
-            <EndUserPersonalDataForm />
-          </Route>
-          <Route exact path="/endUserDashboard/EndUserPersonalData">
-            <EndUserPersonalData />
-          </Route>
-          <Route exact path="/endUserDashboard/nft_badges">
-            <EndUserNFTBadges readContracts={readContracts} walletAddress={address} />
-          </Route>
+    <div>
+      <div style={{ margin: "auto", marginTop: 0, paddingBottom: 32 }}>
+        <BrowserRouter>
+          <Menu style={{ width: 200 }} selectedKeys={[route]} mode="vertical">
+            <SubMenu key="sub1" icon={<RocketOutlined />} title="Dashboard actions">
+              <Menu.Item icon={<FormOutlined />} key="/EndUserPersonalDataForm">
+                <Link
+                  onClick={() => {
+                    setRoute("/EndUserPersonalDataForm");
+                  }}
+                  to="/EndUserPersonalDataForm"
+                >
+                  Enter KYC
+                </Link>
+              </Menu.Item>
+              <Menu.Item icon={<FileProtectOutlined />} key="/EndUserPersonalData">
+                <Link
+                  onClick={() => {
+                    setRoute("/EndUserPersonalData");
+                  }}
+                  to="/EndUserPersonalData"
+                >
+                  My KYC Data
+                </Link>
+              </Menu.Item>
+              <Menu.Item icon={<SafetyCertificateOutlined />} key="/nft_badges">
+                <Link
+                  onClick={() => {
+                    setRoute("/nft_badges");
+                  }}
+                  to="/nft_badges"
+                >
+                  My Badges
+                </Link>
+              </Menu.Item>
+            </SubMenu>
+          </Menu>
 
-            {/*
-                <Contract/> component will automatically parse your ABI and give you a form to interact with it locally
-            */}
+          <Switch>
+            <Route exact path="/EndUserPersonalDataForm">
+              <EndUserPersonalDataForm />
+            </Route>
+            <Route exact path="/EndUserPersonalData">
+              <EndUserPersonalData />
+            </Route>
+            <Route exact path="/nft_badges">
+              <EndUserNFTBadges readContracts={readContracts} walletAddress={address} />
+            </Route>
+          </Switch>
+        </BrowserRouter>
 
-          <Route exact path="/endUserDashboard/debugcontracts">
-            <Contract
-              name="YourCollectible"
-              signer={userSigner}
-              provider={localProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-            />
-          </Route>
-        </Switch>
-      </BrowserRouter>
-
-      {/* account and wallet */}
-      <div style={{ position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>
-        <Account
-          address={address}
-          localProvider={localProvider}
-          userSigner={userSigner}
-          mainnetProvider={mainnetProvider}
-          // price={price}
-          web3Modal={web3Modal}
-          loadWeb3Modal={loadWeb3Modal}
-          logoutOfWeb3Modal={logoutOfWeb3Modal}
-          blockExplorer={blockExplorer}
-        />
+        {/* account and wallet */}
+        <div style={{ position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>
+          <Account
+            address={address}
+            localProvider={localProvider}
+            userSigner={userSigner}
+            mainnetProvider={mainnetProvider}
+            // price={price}
+            web3Modal={web3Modal}
+            loadWeb3Modal={loadWeb3Modal}
+            logoutOfWeb3Modal={logoutOfWeb3Modal}
+            blockExplorer={blockExplorer}
+          />
+        </div>
       </div>
     </div>
   );

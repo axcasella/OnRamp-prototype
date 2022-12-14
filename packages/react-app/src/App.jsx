@@ -1,14 +1,16 @@
 import { Alert, Button, Menu } from "antd";
+import { BankOutlined, UserOutlined, UsergroupAddOutlined, LoginOutlined, UserAddOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import React, { useCallback, useEffect, useState } from "react";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-
 import { BrowserRouter, Route, Switch, Link, useHistory } from "react-router-dom";
 import "./App.css";
 import { EnterpriseUserLogin, EnterpriseUserRegister, EndUserOnboard, EndUserDashboard, EnterpriseUserDashboard, Header, EnterpriseUserViewKYCData } from "./components";
 import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { useExchangePrice, useUserSigner } from "./hooks";
+
+const { SubMenu } = Menu;
 
 const { ethers } = require("ethers");
 
@@ -171,45 +173,50 @@ function App() {
       loadWeb3Modal();
     }
   }, [loadWeb3Modal]);
+  
   return (
     <div className="App">
       <Header />
       {networkDisplay}
 
       <BrowserRouter>
-        <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
-          <Menu.Item key="/EnterpriseUserRegister">
-            <Link
-              onClick={() => {
-                setRoute("/EnterpriseUserRegister");
-              }}
-              to="/EnterpriseUserRegister"
-            >
-              Enterprise User Registration
-            </Link>
-          </Menu.Item>
+        <Menu style={{ width: 200 }} selectedKeys={[route]} mode="vertical">
+          <SubMenu key="sub1" icon={<BankOutlined />} title="Enterprise users">
+            <Menu.Item key="/EnterpriseUserRegister" icon={<UsergroupAddOutlined />}>
+              <Link
+                onClick={() => {
+                  setRoute("/EnterpriseUserRegister");
+                }}
+                to="/EnterpriseUserRegister"
+              >
+                Registration
+              </Link>
+            </Menu.Item>
 
-          <Menu.Item key="/EnterpriseUserLogin">
-            <Link
-              onClick={() => {
-                setRoute("/EnterpriseUserLogin");
-              }}
-              to="/EnterpriseUserLogin"
-            >
-              Enterprise User Login
-            </Link>
-          </Menu.Item>
+            <Menu.Item key="/EnterpriseUserLogin" icon={<LoginOutlined />}>
+              <Link
+                onClick={() => {
+                  setRoute("/EnterpriseUserLogin");
+                }}
+                to="/EnterpriseUserLogin"
+              >
+                Login
+              </Link>
+            </Menu.Item>
+          </SubMenu>
 
-          <Menu.Item key="/EndUserOnboard">
-            <Link
-              onClick={() => {
-                setRoute("/EndUserOnboard");
-              }}
-              to="/EndUserOnboard"
-            >
-              End User Onboarding
-            </Link>
-          </Menu.Item>
+          <SubMenu key="sub2" icon={<UserOutlined />} title="End users">
+            <Menu.Item key="/EndUserOnboard" icon={<UserAddOutlined />}>
+              <Link
+                onClick={() => {
+                  setRoute("/EndUserOnboard");
+                }}
+                to="/EndUserOnboard"
+              >
+                Onboard
+              </Link>
+            </Menu.Item>
+          </SubMenu>
         </Menu>
 
         <Switch>

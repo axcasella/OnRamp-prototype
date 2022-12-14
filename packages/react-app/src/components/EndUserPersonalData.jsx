@@ -163,7 +163,7 @@ export default function EndUserPersonalData() {
   ];
 
   return (
-    <div>
+    <div style={{ width: 1400, margin: "auto", marginLeft: 225, marginTop: 0, paddingBottom: 32 }}>
       {loading ? (
         "Loading KYC data"
       ) : (

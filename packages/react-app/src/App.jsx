@@ -131,7 +131,7 @@ function App() {
     }
   } else {
     networkDisplay = (
-      <div style={{ zIndex: -1, position: "absolute", left: 20, top: 40, padding: 16, color: targetNetwork.color }}>
+      <div style={{ zIndex: -1, position: "absolute", right: 20, top: 40, padding: 16, color: targetNetwork.color }}>
         {targetNetwork.name}
       </div>
     );
@@ -178,7 +178,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      {networkDisplay}
+      {/* {networkDisplay} */}
 
       <BrowserRouter>
         <Menu style={{ width: 200 }} selectedKeys={[route]} mode="vertical">

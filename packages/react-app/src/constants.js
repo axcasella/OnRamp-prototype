@@ -67,7 +67,7 @@ export const NETWORKS = {
   },
   matic: {
     // https://wiki.polygon.technology/docs/develop/network-details/endpoints
-    name: "matic",
+    name: "Polygon Mainnet",
     color: "#2bbdf7",
     chainId: 137,
     price: 1,

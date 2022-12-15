@@ -56,7 +56,7 @@ export default function EndUserOnboard({ web3Modal, loadWeb3Modal, userSigner })
   return (
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <div>
-        <Form labelCol={{ span: 4 }} wrapperCol={{ span: 14 }} layout="horizontal">
+        <Form labelCol={{ span: 4 }} layout="horizontal">
           <Form.Item>
             <h2>Onboard</h2>
           </Form.Item>

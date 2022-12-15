@@ -17,7 +17,7 @@ export default function EndUserNFTBadges({ readContracts, walletAddress }) {
         setMyNFTs(nfts);
         console.log("nfts", nfts);
         setTableDataSrc(
-          // attributes [AML, CRED_PROTOCOL_SCORE, IS_BUSINESS, COUNTRY, DID, VERIFIED]
+          // attributes [AML, CRED_PROTOCOL_SCORE, IS_BUSINESS, COUNTRY, DID, USER_STATUS, WALLET_STATUS]
           nfts &&
             nfts.map(row => ({
             aml: row.attributes[0].value,

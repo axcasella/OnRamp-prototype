@@ -24,7 +24,7 @@ const verifiedBadgeImgURL =
   "https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg";
 
 const notVerifiedBadgeImgURL =
-  "https://upload.wikimedia.org/wikipedia/commons/3/3f/Warning_Icon_%28simple_colors%29.png";
+  "https://upload.wikimedia.org/wikipedia/commons/e/ea/Mauritius_Road_Signs_-_Warning_Sign_-_Other_dangers.svg";
 
 const OFACCountryList = [
   "Belarus",
@@ -46,15 +46,28 @@ const isBannedCountry = (country) => {
   return OFACCountryList.includes(country);
 };
 
+const bannedWalletList = ["0x2eCB4dc5391Cf88B9bb2A8adbc643F9D3ED03c85"];
+
+const isBannedWallet = (address) => {
+  return bannedWalletList.includes(address);
+};
+
 // @param address - address to mint to
 // @param country - country address resides in
 const mintKYCBadgeNFT = async (address, country) => {
   let verified = true;
+  let userVerified = true;
+  let walletVerified = true;
 
   // validate country first
   if (isBannedCountry(country)) {
-    verified = false;
+    userVerified = false;
     console.log("country is banned from doing business");
+  }
+
+  if (isBannedWallet(address)) {
+    walletVerified = false;
+    console.log("wallet is banned from doing business");
   }
 
   const amlValue = getRandomFromMinMax(5, 10); // AML value
@@ -62,6 +75,7 @@ const mintKYCBadgeNFT = async (address, country) => {
   const isBusiness = false; // use false as default for prototype
 
   // if (amlValue < 7 || credProtocolScore < 700) verified = false;
+  if (!walletVerified || !userVerified) verified = false;
 
   const kycBadge = {
     description: "KYC badge",
@@ -90,8 +104,12 @@ const mintKYCBadgeNFT = async (address, country) => {
         value: address,
       },
       {
-        trait_type: "VERIFIED",
-        value: verified ? "TRUE" : "FALSE",
+        trait_type: "USER_STATUS",
+        value: userVerified ? "TRUE" : "FALSE",
+      },
+      {
+        trait_type: "WALLET_STATUS",
+        value: walletVerified ? "TRUE" : "FALSE",
       },
     ],
   };

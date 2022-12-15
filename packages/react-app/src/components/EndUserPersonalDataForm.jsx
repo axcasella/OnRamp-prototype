@@ -107,17 +107,17 @@ export default function EndUserPersonalDataForm() {
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       {submittedData ? (
         <div>
-          <h3 style={{ marginBottom: 0, color: "skyblue" }}>👋 {walletAddress}</h3>
+          <h3 style={{ marginBottom: 0, color: "#2caad9" }}>👋 {walletAddress}</h3>
           <br />
-          <h3>You have successfully validated with OnRamp 🚀 </h3>
-          <h3>Now you get instant access to all of our partners as an OnRamp network participant 🌐</h3>
+          <h3>✅ You have successfully validated with OnRamp! </h3>
+          <h3>🌐 Now you get instant access to all of our partners as an OnRamp network participant.</h3>
         </div>
       ) : (
         <>
-          <h2>📝 Share Your Data Once and Never Again</h2>
-          <Form labelCol={{ span: 4 }} layout="horizontal">
+          <h2 style={{ marginLeft: 30 }}>📝 Share Your Data Once and Never Again</h2>
+          <Form size="large" labelCol={{ span: 6 }} layout="horizontal">
             <Form.Item label="Your Address: ">
-              <h3 style={{ marginBottom: 0, marginLeft: 10, color: "skyblue", textAlign: "left" }}>{walletAddress}</h3>
+              <h3 style={{ marginBottom: 0, marginLeft: 10, color: "#2caad9", textAlign: "left" }}>{walletAddress}</h3>
             </Form.Item>
             <Form.Item label="First Name">
               <Input

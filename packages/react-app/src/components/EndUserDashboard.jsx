@@ -107,7 +107,6 @@ export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner 
               path={["/EndUserDashboard", "/EndUserPersonalDataForm"]}
               render={() => <EndUserPersonalDataForm />}
             />
-            {/* <Route exact path="/EndUserPersonalDataForm" render={() => <EndUserPersonalDataForm />} /> */}
             <Route exact path="/EndUserPersonalData" render={() => <EndUserPersonalData />} />
             <Route
               exact

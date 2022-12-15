@@ -9,6 +9,7 @@ export default function EndUserPersonalData() {
   const [showDecryptButton, setShowDecryptButton] = useState(true);
 
   const getMyPersonalEncryptedData = async () => {
+    console.log("getMyPersonalEncryptedData walletAddress", walletAddress)
     const response = await fetch(`http://localhost:8000/api/getUserEncryptedKYCData/walletAddress/${walletAddress}`, {
       method: "GET",
       headers: {
@@ -44,7 +45,7 @@ export default function EndUserPersonalData() {
   };
 
   useEffect(() => {
-    getMyPersonalEncryptedData();
+    if (loading) getMyPersonalEncryptedData();
   }, [walletAddress]);
 
   const getMyPersonalDecryptedData = async () => {
@@ -88,21 +89,21 @@ export default function EndUserPersonalData() {
       title: "Wallet Address",
       dataIndex: "walletAddress",
       key: "walletAddress",
-      width: 250,
+      width: 200,
     },
     {
       title: "First Name",
       dataIndex: "firstname",
       key: "firstname",
       ellipsis: true,
-      width: 100,
+      width: 150,
     },
     {
       title: "Last Name",
       dataIndex: "lastname",
       key: "lastname",
       ellipsis: true,
-      width: 100,
+      width: 150,
     },
     {
       title: "Address",
@@ -137,7 +138,7 @@ export default function EndUserPersonalData() {
       dataIndex: "state",
       key: "state",
       ellipsis: true,
-      width: 80,
+      width: 100,
     },
     {
       title: "Country",
@@ -158,7 +159,7 @@ export default function EndUserPersonalData() {
       dataIndex: "ssn",
       key: "ssn",
       ellipsis: true,
-      width: 150,
+      width: 100,
     },
   ];
 

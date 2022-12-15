@@ -4,4 +4,9 @@
   font-weight: 400 !important;
 }
 
+.ant-form-item-label>label {
+  font-size: 18px !important;
+}
+
+.ant-table table { font-size: 17px; }
 

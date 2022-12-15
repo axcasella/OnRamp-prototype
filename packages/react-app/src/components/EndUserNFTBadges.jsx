@@ -39,31 +39,31 @@ export default function EndUserNFTBadges({ readContracts, walletAddress }) {
       title: "Wallet address",
       dataIndex: "address",
       key: "org",
-      width: 225,
+      width: 250,
     },
     {
       title: "AML Score",
       dataIndex: "aml",
       key: "aml",
-      width: 100,
+      width: 150,
     },
     {
       title: "Credit Protocol Score",
       dataIndex: "cred",
       key: "cred",
-      width: 150,
+      width: 200,
     },
     {
       title: "Business Account",
       dataIndex: "business",
       key: "business",
-      width: 125,
+      width: 150,
     },
     {
       title: "Country",
       dataIndex: "country",
       key: "country",
-      width: 100,
+      width: 150,
     },
     {
       title: "Badges",
@@ -74,7 +74,7 @@ export default function EndUserNFTBadges({ readContracts, walletAddress }) {
   ];
 
   return (
-    <div style={{ width: 1200, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+    <div style={{ width: 1300, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <div>
           {loading ? (
             "No users found"

@@ -41,17 +41,17 @@ export default function EnterpriseUserRegister() {
 
     const data = await response.json();
     if (data.status === "ok") {
-        history.push("/EnterpriseUserLogin");
+      history.push("/EnterpriseUserLogin");
     } else {
-        alert("Registration failed");
+      alert("Registration failed");
     }
   };
 
   return (
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-      <Form labelCol={{ span: 4 }} wrapperCol={{ span: 14 }} layout="horizontal" onSubmit={registerUser}>
+      <Form size="large" labelCol={{ span: 6 }} layout="horizontal" onSubmit={registerUser}>
         <Form.Item>
-          <h2>Enterprise sign up</h2>
+          <h2>Enterprise User Sign Up</h2>
         </Form.Item>
         <Form.Item label="Name">
           <Input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} />
@@ -66,7 +66,19 @@ export default function EnterpriseUserRegister() {
           <Input type="text" placeholder="Your company" value={org} onChange={e => setOrg(e.target.value)} />
         </Form.Item>
         <Form.Item label="Your role">
-          <Select options={options} onChange={e => handleRoleChange(e)} />
+          <Select
+            options={options}
+            onChange={e => handleRoleChange(e)}
+            theme={theme => ({
+              ...theme,
+              borderRadius: 0,
+              colors: {
+                ...theme.colors,
+                primary25: "black",
+                primary: "black",
+              },
+            })}
+          />
         </Form.Item>
         <Form.Item>
           <Button onClick={registerUser} shape="round" size="large" type="default">

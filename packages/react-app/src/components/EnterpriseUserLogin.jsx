@@ -33,9 +33,9 @@ export default function EnterpriseUserLogin() {
 
   return (
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-      <Form labelCol={{ span: 4 }} wrapperCol={{ span: 14 }} layout="horizontal">
+      <Form size="large" labelCol={{ span: 6 }} layout="horizontal">
         <Form.Item>
-          <h2>Enterprise login</h2>
+          <h2>Enterprise User login</h2>
         </Form.Item>
         <Form.Item label="Email">
           <Input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />

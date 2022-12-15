@@ -208,9 +208,9 @@ function App() {
           <SubMenu key="sub2" icon={<UserOutlined />} title="End users">
             <Menu.Item key="/EndUserOnboard" icon={<UserAddOutlined />}>
               <Link
-                onClick={() => {
-                  setRoute("/EndUserOnboard");
-                }}
+                // onClick={() => {
+                //   setRoute("/EndUserOnboard");
+                // }}
                 to="/EndUserOnboard"
               >
                 Onboard
@@ -220,19 +220,18 @@ function App() {
         </Menu>
 
         <Switch>
-          <Route exact path="/" component={EnterpriseUserLogin} />
           <Route exact path="/EnterpriseUserLogin" component={EnterpriseUserLogin} />
           <Route exact path="/EnterpriseUserRegister" component={EnterpriseUserRegister} />
           <Route
             exact
-            path="/EndUserOnboard"
+            path={["/EndUserOnboard", "/"]}
             render={() => (
               <EndUserOnboard web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} userSigner={userSigner} />
             )}
           />
           <Route
             exact
-            path="/endUserDashboard"
+            path="/EndUserDashboard"
             render={() => (
               <EndUserDashboard web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} userSigner={userSigner} />
             )}

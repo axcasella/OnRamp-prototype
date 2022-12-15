@@ -45,7 +45,7 @@ export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner 
     }, 1);
   };
 
-  const [route, setRoute] = useState();
+  const [route, setRoute] = useState("/EndUserPersonalDataForm");
   const [address, setAddress] = useState();
 
   // Load in your local 📝 contract and read a value from it:
@@ -88,12 +88,12 @@ export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner 
                   My KYC Data
                 </Link>
               </Menu.Item>
-              <Menu.Item icon={<SafetyCertificateOutlined />} key="/nft_badges">
+              <Menu.Item icon={<SafetyCertificateOutlined />} key="/NFTBadges">
                 <Link
                   onClick={() => {
-                    setRoute("/nft_badges");
+                    setRoute("/NFTBadges");
                   }}
-                  to="/nft_badges"
+                  to="/NFTBadges"
                 >
                   My Badges
                 </Link>
@@ -102,15 +102,18 @@ export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner 
           </Menu>
 
           <Switch>
-            <Route exact path="/EndUserPersonalDataForm">
-              <EndUserPersonalDataForm />
-            </Route>
-            <Route exact path="/EndUserPersonalData">
-              <EndUserPersonalData />
-            </Route>
-            <Route exact path="/nft_badges">
-              <EndUserNFTBadges readContracts={readContracts} walletAddress={address} />
-            </Route>
+            <Route
+              exact
+              path={["/EndUserDashboard", "/EndUserPersonalDataForm"]}
+              render={() => <EndUserPersonalDataForm />}
+            />
+            {/* <Route exact path="/EndUserPersonalDataForm" render={() => <EndUserPersonalDataForm />} /> */}
+            <Route exact path="/EndUserPersonalData" render={() => <EndUserPersonalData />} />
+            <Route
+              exact
+              path="/NFTBadges"
+              render={() => <EndUserNFTBadges readContracts={readContracts} walletAddress={address} />}
+            />
           </Switch>
         </BrowserRouter>
 

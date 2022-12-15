@@ -6,8 +6,8 @@ export default function EndUserOnboard({ web3Modal, loadWeb3Modal, userSigner })
   const history = useHistory();
   const [address, setAddress] = useState();
 
-  const routeChange = () => { 
-    history.push("/endUserDashboard");
+  const routeChange = () => {
+    history.replace("/EndUserDashboard");
   };
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function EndUserOnboard({ web3Modal, loadWeb3Modal, userSigner })
 
   const logoutOfWeb3Modal = async () => {
     await web3Modal.clearCachedProvider();
-  
+
     history.replace("/EndUserOnboard");
     localStorage.removeItem("walletAddress");
 
@@ -34,22 +34,29 @@ export default function EndUserOnboard({ web3Modal, loadWeb3Modal, userSigner })
   const modalButtons = [];
   if (web3Modal.cachedProvider) {
     modalButtons.push(
-      <Form.Item>
-        <Button onClick={logoutOfWeb3Modal}>Logout</Button>
-      </Form.Item>,
-      <Form.Item>
-        <Button type="primary" onClick={routeChange}>
-          User Dashboard
-        </Button>
-      </Form.Item>,
+      <>
+        <Form.Item>
+          <h2>Your Dashboard</h2>
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" onClick={routeChange}>
+            Let's Go
+          </Button>
+        </Form.Item>
+      </>,
     );
   } else {
     modalButtons.push(
-      <Form.Item>
-        <Button type="primary" onClick={loadWeb3Modal}>
-          Connect
-        </Button>
-      </Form.Item>,
+      <>
+        <Form.Item>
+          <h2>Connect Your Wallet</h2>
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" onClick={loadWeb3Modal}>
+            Connect
+          </Button>
+        </Form.Item>
+      </>,
     );
   }
 
@@ -57,9 +64,6 @@ export default function EndUserOnboard({ web3Modal, loadWeb3Modal, userSigner })
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <div>
         <Form labelCol={{ span: 4 }} layout="horizontal">
-          <Form.Item>
-            <h2>Onboard</h2>
-          </Form.Item>
           {modalButtons}
         </Form>
       </div>

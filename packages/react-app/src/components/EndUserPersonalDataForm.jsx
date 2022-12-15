@@ -96,7 +96,6 @@ export default function EndUserPersonalDataForm() {
 
     if (response.status === 200 && data) {
       setSubmittedData(true);
-      history.replace("/EndUserPersonalData");
     }
   };
 
@@ -107,67 +106,73 @@ export default function EndUserPersonalDataForm() {
   return (
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       {submittedData ? (
-        <h4>Successfully submitted data</h4>
+        <div>
+          <h3 style={{ marginBottom: 0, color: "skyblue" }}>👋 {walletAddress}</h3>
+          <br />
+          <h3>You have successfully validated with OnRamp 🚀 </h3>
+          <h3>Now you get instant access to all of our partners as an OnRamp network participant 🌐</h3>
+        </div>
       ) : (
-        <Form labelCol={{ span: 4 }} wrapperCol={{ span: 14 }} layout="horizontal">
-          <Form.Item label="Wallet Address: ">
-            <h4 style={{ marginLeft: 10, marginBottom: 0, color: "skyblue" }}>{walletAddress}</h4>
-          </Form.Item>
-          <Form.Item label="First Name">
-            <Input
-              type="text"
-              placeholder="First name"
-              value={firstname}
-              onChange={e => setFirstName(e.target.value)}
-            />
-          </Form.Item>
-          <Form.Item label="Last Name">
-            <Input type="text" placeholder="Last name" value={lastname} onChange={e => setLastName(e.target.value)} />
-          </Form.Item>
-          <Form.Item label="Email">
-            <Input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-          </Form.Item>
-          <Form.Item label="Phone Number">
-            <Input
-              type="tel"
-              placeholder="Format: 123-456-7890"
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
-            />
-          </Form.Item>
-          <Form.Item label="Birthdate">
-            <Input type="date" value={birthdate} onChange={e => setBirthDate(e.target.value)} />
-          </Form.Item>
-          <Form.Item label="SSN">
-            <Input type="text" placeholder="SSN" value={ssn} onChange={e => setSSN(e.target.value)} />
-          </Form.Item>
-          <Form.Item label="Address">
-            <Input type="text" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} />
-          </Form.Item>
-          <Form.Item label="City">
-            <Input type="text" placeholder="City" value={city} onChange={e => setCity(e.target.value)} />
-          </Form.Item>
-          <Form.Item label="State">
-            <Input type="text" placeholder="State" value={state} onChange={e => setState(e.target.value)} />
-          </Form.Item>
-          <Form.Item label="Country">
-            <Input type="text" placeholder="Country" value={country} onChange={e => setCountry(e.target.value)} />
-          </Form.Item>
-          <Form.Item label="Zip Code">
-            <Input
-              type="text"
-              placeholder="Zip code"
-              value={zip}
-              onChange={e => setZip(e.target.value)}
-              pattern="[0-9]*"
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" onClick={onboardUserWithKYC}>
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
+        <>
+          <h2>📝 Share Your Data Once and Never Again</h2>
+          <Form labelCol={{ span: 4 }} layout="horizontal">
+            <Form.Item label="Your Address: ">
+              <h3 style={{ marginBottom: 0, marginLeft: 10, color: "skyblue", textAlign: "left" }}>{walletAddress}</h3>
+            </Form.Item>
+            <Form.Item label="First Name">
+              <Input
+                type="text"
+                placeholder="First name"
+                value={firstname}
+                onChange={e => setFirstName(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Last Name">
+              <Input type="text" placeholder="Last name" value={lastname} onChange={e => setLastName(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Email">
+              <Input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Phone Number">
+              <Input
+                type="tel"
+                placeholder="Format: 123-456-7890"
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item label="Birthdate">
+              <Input type="date" value={birthdate} onChange={e => setBirthDate(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="SSN">
+              <Input type="text" placeholder="SSN" value={ssn} onChange={e => setSSN(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Address">
+              <Input type="text" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="City">
+              <Input type="text" placeholder="City" value={city} onChange={e => setCity(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="State">
+              <Input type="text" placeholder="State" value={state} onChange={e => setState(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Country">
+              <Input type="text" placeholder="Country" value={country} onChange={e => setCountry(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Zip Code">
+              <Input
+                type="text"
+                placeholder="Zip code"
+                value={zip}
+                onChange={e => setZip(e.target.value)}
+                pattern="[0-9]*" />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" onClick={onboardUserWithKYC}>
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+        </>
       )}
     </div>
   );

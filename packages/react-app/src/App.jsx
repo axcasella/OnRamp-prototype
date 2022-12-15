@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { BrowserRouter, Route, Switch, Link, useHistory } from "react-router-dom";
+import "@fontsource/ibm-plex-mono";
 import "./App.css";
 import { EnterpriseUserLogin, EnterpriseUserRegister, EndUserOnboard, EndUserDashboard, EnterpriseUserDashboard, Header, EnterpriseUserViewKYCData } from "./components";
 import { INFURA_ID, NETWORK, NETWORKS } from "./constants";

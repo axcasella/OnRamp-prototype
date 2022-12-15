@@ -90,7 +90,11 @@ export default function EnterpriseUserDashboard() {
               userStatus: row.attributes[5].value === "TRUE" ? "Passed" : "Failed",
               walletStatus: row.attributes[6].value === "TRUE" ? "Passed" : "Failed",
               badges: <img src={row.image} style={{ maxWidth: 50 }} alt="NFT badge" />,
-              action: <Button type="primary">View data</Button>,
+              action: (
+                <Button shape="round" size="large" type="default">
+                  View data
+                </Button>
+              ),
             })),
         );
 

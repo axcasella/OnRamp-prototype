@@ -167,7 +167,7 @@ export default function EndUserPersonalDataForm() {
                 pattern="[0-9]*" />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" onClick={onboardUserWithKYC}>
+              <Button onClick={onboardUserWithKYC} shape="round" size="large" type="default">
                 Submit
               </Button>
             </Form.Item>

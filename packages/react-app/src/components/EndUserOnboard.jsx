@@ -39,7 +39,7 @@ export default function EndUserOnboard({ web3Modal, loadWeb3Modal, userSigner })
           <h2>Your Dashboard</h2>
         </Form.Item>
         <Form.Item>
-          <Button type="primary" onClick={routeChange}>
+          <Button onClick={routeChange} shape="round" size="large" type="default">
             Let's Go
           </Button>
         </Form.Item>
@@ -52,7 +52,7 @@ export default function EndUserOnboard({ web3Modal, loadWeb3Modal, userSigner })
           <h2>Connect Your Wallet</h2>
         </Form.Item>
         <Form.Item>
-          <Button type="primary" onClick={loadWeb3Modal}>
+          <Button onClick={loadWeb3Modal} shape="round" size="large" type="default">
             Connect
           </Button>
         </Form.Item>

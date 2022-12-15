@@ -170,9 +170,12 @@ export default function EndUserPersonalData() {
         <div>
           <Table columns={columns} dataSource={tableDataSrc} />
           {showDecryptButton ? (
-            <Button onClick={getMyPersonalDecryptedData}> Decrypt my data </Button>
+            <Button onClick={getMyPersonalDecryptedData} shape="round" size="large" type="default">
+              {" "}
+              Decrypt my data{" "}
+            </Button>
           ) : (
-            <p>Only you and dapps you have given access to can see your decrypted data</p>
+            <h3>Only you and dapps you have given access to can see your decrypted data</h3>
           )}
         </div>
       )}

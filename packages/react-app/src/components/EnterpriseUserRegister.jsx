@@ -69,7 +69,7 @@ export default function EnterpriseUserRegister() {
           <Select options={options} onChange={e => handleRoleChange(e)} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" onClick={registerUser}>
+          <Button onClick={registerUser} shape="round" size="large" type="default">
             Register
           </Button>
         </Form.Item>

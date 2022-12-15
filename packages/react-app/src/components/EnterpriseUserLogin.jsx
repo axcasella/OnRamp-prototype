@@ -44,7 +44,7 @@ export default function EnterpriseUserLogin() {
           <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" onClick={loginEnterpriseUser}>
+          <Button onClick={loginEnterpriseUser} shape="round" size="large" type="default">
             Login
           </Button>
         </Form.Item>

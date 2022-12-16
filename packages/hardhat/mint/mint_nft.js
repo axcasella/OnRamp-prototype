@@ -114,10 +114,10 @@ const mintKYCBadgeNFT = async (address, country) => {
     ],
   };
 
-  return mintNFT(address, kycBadge);
+  return mintNFT(address, kycBadge, verified);
 };
 
-const mintNFT = async (address, item) => {
+const mintNFT = async (address, item, verified) => {
   console.log("\n\n 🎫 Minting to " + address + "...\n");
 
   let uploaded = {};
@@ -125,7 +125,11 @@ const mintNFT = async (address, item) => {
     console.log("Uploading kycBadge for address", address);
     uploaded = await ipfs.add(JSON.stringify(item));
   } catch (err) {
-    return { status: false, msg: "Failed to upload to IPFS: " + err };
+    return {
+      status: false,
+      msg: "Failed to upload to IPFS: " + err,
+      verified: verified,
+    };
   }
 
   try {
@@ -144,11 +148,15 @@ const mintNFT = async (address, item) => {
     });
     console.log("Minted ", result);
   } catch (err) {
-    return { status: false, msg: "Failed to mint to blockchain: " + err };
+    return {
+      status: false,
+      msg: "Failed to mint to blockchain: " + err,
+      verified: verified,
+    };
   }
 
   // minted
-  return { status: true, msg: "Successfully minted" };
+  return { status: true, msg: "Successfully minted", verified: verified };
 
   // console.log("Transferring Ownership of YourCollectible to "+address+"...")
   // await yourCollectible.transferOwnership(address)

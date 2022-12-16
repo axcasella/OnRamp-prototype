@@ -102,6 +102,7 @@ app.post("/api/onboardUserWithKYC", async (req, res) => {
           phone: await encryptData(publicKey, req.body.phone),
           walletAddress: req.body.walletAddress,
           consentedOrgs: [],
+          verified: req.body.verified,
         });
         res.json({ status: "ok" });
       }
@@ -159,6 +160,7 @@ app.get(
           phone: await decryptData(priv, userData.phone),
           walletAddress: userData.walletAddress,
           consentedOrgs: userData.consentedOrgs,
+          verified: userData.verified,
         };
 
         res.status(200).send(decryptedData);
@@ -192,13 +194,13 @@ app.post("/api/mint_kyc_nft", async (req, res) => {
     console.log("mint api result: ", result);
 
     if (result.status === true) {
-      return res.json({ status: "minted" });
+      return res.json({ status: "minted", verifiedAddress: result.verified });
     }
 
-    res.json({ status: result.msg });
+    res.json({ status: result.msg, verifiedAddress: false });
   } catch (err) {
     console.error("Mint NFT error ", err);
-    res.json({ status: "Mint NFT failed" });
+    res.json({ status: "Mint NFT failed", verifiedAddress: false });
   }
 });
 

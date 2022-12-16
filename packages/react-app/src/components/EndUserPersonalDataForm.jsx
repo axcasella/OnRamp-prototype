@@ -20,6 +20,7 @@ export default function EndUserPersonalDataForm() {
   const [ssn, setSSN] = useState("");
 
   const [submittedData, setSubmittedData] = useState(false);
+  const [verified, setVerified] = useState(false);
 
   const mintNFTBadge = async () => {
     const response = await fetch("http://localhost:8000/api/mint_kyc_nft", {
@@ -34,15 +35,30 @@ export default function EndUserPersonalDataForm() {
     });
 
     const data = await response.json();
+    console.log("data", data);
     if (data.status === "minted") {
-        console.log("Minted badge");
-    } else {
-        alert("Failed to mint badge");
+      console.log("Minted badge");
+      console.log("right after mint data.verifiedAddress", data.verifiedAddress);
+      setVerified(data.verifiedAddress);
+      return { status: true, verifiedAddress: data.verifiedAddress };
     }
+
+    console.log("Failed to mint badge");
+    return { status: false, verifiedAddress: false };
   };
 
   const onboardUserWithKYC = async event => {
     event.preventDefault();
+
+    let verifiedUser = false;
+    try {
+      const { status, verifiedAddress } = await mintNFTBadge();
+      verifiedUser = verifiedAddress;
+      console.log("result of mint verifiedAddress", verifiedAddress);
+      if (status === true) console.log("mint ok");
+    } catch (err) {
+      console.log("mint failed", err);
+    }
 
     const response = await fetch("http://localhost:8000/api/onboardUserWithKYC", {
       method: "POST",
@@ -62,22 +78,15 @@ export default function EndUserPersonalDataForm() {
         ssn,
         phone,
         walletAddress,
+        verified: verifiedUser,
       }),
     });
 
     const data = await response.json();
     if (data.status === "ok") {
       console.log("onboard ok");
-      try {
-        await mintNFTBadge();
-        console.log("mint ok");
-
-        setSubmittedData(true);
-      } catch (err) {
-        console.log("mint failed", err);
-      }
+      setSubmittedData(true);
     } else {
-      alert("User onboarding failed");
       console.log("User onboarding failed", data);
     }
   };
@@ -96,6 +105,7 @@ export default function EndUserPersonalDataForm() {
 
     if (response.status === 200 && data) {
       setSubmittedData(true);
+      if (data.verified === true) setVerified(true);
     }
   };
 
@@ -109,8 +119,11 @@ export default function EndUserPersonalDataForm() {
         <div>
           <h3 style={{ marginBottom: 0, color: "#2caad9" }}>👋 {walletAddress}</h3>
           <br />
-          <h3>✅ You have successfully validated with OnRamp! </h3>
-          <h3>🌐 Now you get instant access to all of our partners as an OnRamp network participant.</h3>
+          {verified ? (
+            <h3>✅ You have successfully validated with OnRamp! </h3>
+          ) : (
+            <h3>❌ You have failed to validate! </h3>
+          )}
         </div>
       ) : (
         <>

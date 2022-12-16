@@ -196,11 +196,10 @@ app.post("/api/mint_kyc_nft", async (req, res) => {
     if (result.status === true) {
       return res.json({ status: "minted", verifiedAddress: result.verified });
     }
-
-    res.json({ status: result.msg, verifiedAddress: false });
+    // introduce retry logic in the future
+    res.json({ status: result.msg, verifiedAddress: result.verified });
   } catch (err) {
     console.error("Mint NFT error ", err);
-    res.json({ status: "Mint NFT failed", verifiedAddress: false });
   }
 });
 

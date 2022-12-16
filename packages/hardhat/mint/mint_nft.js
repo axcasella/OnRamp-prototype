@@ -156,7 +156,7 @@ const mintNFT = async (address, item, verified) => {
   }
 
   // minted
-  return { status: true, msg: "Successfully minted", verified: verified };
+  return { status: true, msg: "minted", verified: verified };
 
   // console.log("Transferring Ownership of YourCollectible to "+address+"...")
   // await yourCollectible.transferOwnership(address)

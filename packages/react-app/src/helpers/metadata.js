@@ -55,7 +55,6 @@ export const getNFTAndMetaData = async (balance, readContracts, walletAddress) =
         // console.log("attributes", attributes);
         result.push({ id: tokenId, uri: tokenURI, owner: walletAddress, attributes, ...jsonManifest });
         // console.log("--tokenURI: ", tokenURI);
-        return result;
       } catch (e) {
         console.log(e);
       }
@@ -63,4 +62,6 @@ export const getNFTAndMetaData = async (balance, readContracts, walletAddress) =
       console.log(e);
     }
   }
+
+  return result;
 };

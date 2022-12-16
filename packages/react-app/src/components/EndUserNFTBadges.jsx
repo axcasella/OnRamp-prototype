@@ -13,7 +13,8 @@ export default function EndUserNFTBadges({ readContracts, walletAddress }) {
   useEffect(() => {
     if (!myNFTs) {
       const getData = async () => {
-        const nfts = await getNFTAndMetaData(balance, readContracts, walletAddress);
+        // hardcoding balance to 1 for prototype
+        const nfts = await getNFTAndMetaData(1, readContracts, walletAddress);
         setMyNFTs(nfts);
         console.log("nfts", nfts);
         setTableDataSrc(

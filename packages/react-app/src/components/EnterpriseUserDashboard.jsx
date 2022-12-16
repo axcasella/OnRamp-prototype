@@ -87,7 +87,7 @@ export default function EnterpriseUserDashboard() {
               business: row.attributes[2].value === "TRUE" ? "Yes" : "No",
               country: row.attributes[3].value,
               address: row.attributes[4].value,
-              userStatus: row.attributes[5].value === "TRUE" ? "Passed" : "Failed",
+              userStatus: row.attributes[5].value === "TRUE" ? "Passed" : "Fraud",
               walletStatus: row.attributes[6].value === "TRUE" ? "Passed" : "Failed",
               badges: <img src={row.image} style={{ maxWidth: 50 }} alt="NFT badge" />,
               action: (

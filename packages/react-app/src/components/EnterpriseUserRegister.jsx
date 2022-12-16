@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import Select from "react-select";
-import { Button, Form, Input, InputNumber } from "antd";
+import { Button, Form, Input, Select, InputNumber } from "antd";
 
 export default function EnterpriseUserRegister() {
   const history = useHistory();
@@ -19,7 +18,7 @@ export default function EnterpriseUserRegister() {
   // Dropdown select
   const options = [
     { value: "admin", label: "Admin" },
-    { value: "staff", label: "Non-admin Staff" },
+    { value: "staff", label: "Staff" },
   ];
 
   const registerUser = async event => {
@@ -67,17 +66,16 @@ export default function EnterpriseUserRegister() {
         </Form.Item>
         <Form.Item label="Your role">
           <Select
-            options={options}
+            defaultValue="Select"
+            style={{
+              textAlign: "left",
+              fontSize: "16px",
+              fontFamily: "IBM Plex Mono",
+              color: "grey",
+            }}
+            listHeight={250}
             onChange={e => handleRoleChange(e)}
-            theme={theme => ({
-              ...theme,
-              borderRadius: 0,
-              colors: {
-                ...theme.colors,
-                primary25: "black",
-                primary: "black",
-              },
-            })}
+            options={options}
           />
         </Form.Item>
         <Form.Item>

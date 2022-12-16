@@ -181,7 +181,7 @@ function App() {
       {/* {networkDisplay} */}
 
       <BrowserRouter>
-        <Menu style={{ width: 200 }} selectedKeys={[route]} mode="vertical">
+        <Menu style={{ width: 250 }} selectedKeys={[route]} mode="vertical">
           <SubMenu key="sub1" icon={<BankOutlined />} title="Enterprise users">
             <Menu.Item key="/EnterpriseUserRegister" icon={<UsergroupAddOutlined />}>
               <Link

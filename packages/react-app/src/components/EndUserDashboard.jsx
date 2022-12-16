@@ -66,7 +66,7 @@ export default function EndUserDashboard({ web3Modal, loadWeb3Modal, userSigner 
     <div>
       <div style={{ margin: "auto", marginTop: 0, paddingBottom: 32 }}>
         <BrowserRouter>
-          <Menu style={{ width: 200 }} selectedKeys={[route]} mode="vertical">
+          <Menu style={{ width: 250 }} selectedKeys={[route]} mode="vertical">
             <SubMenu key="sub1" icon={<RocketOutlined />} title="Dashboard actions">
               <Menu.Item icon={<FormOutlined />} key="/EndUserPersonalDataForm">
                 <Link

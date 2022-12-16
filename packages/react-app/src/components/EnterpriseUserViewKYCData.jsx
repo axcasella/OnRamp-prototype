@@ -92,21 +92,21 @@ export default function EnterpriseUserViewKYCData() {
       title: "Wallet Address",
       dataIndex: "walletAddress",
       key: "walletAddress",
-      width: 250,
+      width: 225,
     },
     {
       title: "First Name",
       dataIndex: "firstname",
       key: "firstname",
       ellipsis: true,
-      width: 100,
+      width: 150,
     },
     {
       title: "Last Name",
       dataIndex: "lastname",
       key: "lastname",
       ellipsis: true,
-      width: 100,
+      width: 150,
     },
     {
       title: "Address",
@@ -134,7 +134,7 @@ export default function EnterpriseUserViewKYCData() {
       dataIndex: "city",
       key: "city",
       ellipsis: true,
-      width: 100,
+      width: 75,
     },
     {
       title: "State",
@@ -155,14 +155,14 @@ export default function EnterpriseUserViewKYCData() {
       dataIndex: "zip",
       key: "zip",
       ellipsis: true,
-      width: 100,
+      width: 75,
     },
     {
       title: "SSN",
       dataIndex: "ssn",
       key: "ssn",
       ellipsis: true,
-      width: 150,
+      width: 75,
     },
   ];
 

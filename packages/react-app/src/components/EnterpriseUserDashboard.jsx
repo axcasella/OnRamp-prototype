@@ -172,10 +172,10 @@ export default function EnterpriseUserDashboard() {
   return (
     <div style={{ width: 1300, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <div>
-        <h1>All users</h1>
+        <h1>All Wallets</h1>
         <div>
           {loading ? (
-            "No users found"
+            "No wallets found"
           ) : (
             <div>
               <Table columns={columns} dataSource={tableDataSrc} />

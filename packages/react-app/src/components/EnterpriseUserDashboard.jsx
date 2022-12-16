@@ -172,7 +172,7 @@ export default function EnterpriseUserDashboard() {
   return (
     <div style={{ width: 1300, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
       <div>
-        <h1>All Wallets</h1>
+        <h1>Onboarded Wallets</h1>
         <div>
           {loading ? (
             "No wallets found"
